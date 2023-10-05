@@ -49,7 +49,7 @@ class Color(BaseModel):
     class Meta:
         verbose_name = 'Color'
         verbose_name_plural = 'Colores'
-        #ordering = ('nombre',)
+        ordering = ('descripcion',)
 
     def __str__(self):
         return self.nombre

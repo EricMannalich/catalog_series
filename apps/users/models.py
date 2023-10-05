@@ -29,16 +29,6 @@ class UserManager(BaseUserManager):
         return self._create_user(username, email, first_name,last_name, password, False, False, **extra_fields)
 
     def create_superuser(self, username, email, first_name,last_name, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError(
-                'Superuser must be assigned to is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError(
-                'Superuser must be assigned to is_superuser=True.')
         return self._create_user(username, email, first_name,last_name, password, True, True, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):

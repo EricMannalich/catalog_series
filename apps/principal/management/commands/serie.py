@@ -217,12 +217,12 @@ def importSerie():
                     un_obj.cantidad_episodios = cantidad_episodios
                     un_obj.link_imdb = link_imdb
                     un_obj.save()
-                    print("update serie " + nombre + " con genero " + genero_str )
+                    #print("update serie " + nombre + " con genero " + genero_str )
             else:
                 insert = Model(nombre = nombre,sinopsis = sinopsis,emision = emision,image = image,fecha_salida = fecha_salida,categoria = categoria,cantidad_episodios = cantidad_episodios,link_imdb = link_imdb)
                 insert.save()
                 insert.genero.add(genero)
-                print("create serie " + nombre + " con genero " + genero_str )
+                #print("create serie " + nombre + " con genero " + genero_str )
         return True
 
 def exportMenu():

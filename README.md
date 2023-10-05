@@ -67,9 +67,12 @@ Puede descargar `PostgreSQL`: https://www.enterprisedb.com/downloads/postgres-po
 
 7. Restauran la BD con la salva que está en `bd_backup`.
 
-8. Abren `CMD` en donde está el archivo `manage.py` y poner el comando:
+8. Abren `CMD` en donde está el archivo `manage.py` y poner los comandos:
 
 ```bash
+python manage.py makemigrations
+python manage.py migrate
+python manage.py serie --import
 python manage.py runserver
 ```
 En Windows pueden ejecutar `run.bat` para ejecutar el servidor. Solo funciona si fue creado previamente el entorno virtual `env` y se encuentra en la misma carpeta que `run.bat`.
