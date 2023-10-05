@@ -39,7 +39,6 @@ class EpisodioViewSet(GeneralViewSet):
 
 class PuntuacionViewSet(GeneralViewSet):
     serializer_class = PuntuacionSerializer
-    #authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def data_url(self, request):

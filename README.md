@@ -7,8 +7,8 @@
 Puede descargar `Git`: https://git-scm.com/downloads
 
 ```bash
-git clone https://github.com/EricMannalich/Catalogo.git
-cd Catalogo
+git clone https://github.com/EricMannalich/catalog_series.git
+cd catalog_series
 ```
 2. Instalar `Python 3.11`. Asegúrese de marcar las siguientes opciones:
 
@@ -65,15 +65,13 @@ Puede descargar `PostgreSQL`: https://www.enterprisedb.com/downloads/postgres-po
 *  POSTGRES_HOST ="127.0.0.1"
 *  POSTGRES_PORT ="5432"
 
-7. Restauran la BD con la salva que está en `bd_backup`.
-
-8. Abren `CMD` en donde está el archivo `manage.py` y poner los comandos:
+7. Abren `CMD` en donde está el archivo `manage.py` y poner los comandos:
 
 ```bash
-python manage.py makemigrations
-python manage.py migrate
-python manage.py serie --import
-python manage.py runserver
+python manage.py makemigrations #Prepara los cambios de la BD
+python manage.py migrate        #Efectua los cambios de la BD
+python manage.py serie --import #Importa la BD con los archibos de la carpeta bd_backup
+python manage.py runserver      #Ejecuta el servidor de desarrollo
 ```
 En Windows pueden ejecutar `run.bat` para ejecutar el servidor. Solo funciona si fue creado previamente el entorno virtual `env` y se encuentra en la misma carpeta que `run.bat`.
 
@@ -146,7 +144,13 @@ Responder las preguntas del comando anterior y después ejecutar:
 *	Username: postgres
 *	Password: postgres
 
-10. Accede al servidor anterior y crea una nueva BD llamada `Media` y carga la salva que está en `bd_backup`.
+10. Accede al servidor anterior y crea una nueva BD llamada `Media` y carga la salva que está en `bd_backup` con los siguientes comandos:
+
+```bash
+python manage.py makemigrations #Prepara los cambios de la BD
+python manage.py migrate        #Efectua los cambios de la BD
+python manage.py serie --import #Importa la BD con los archibos de la carpeta bd_backup
+```
 
 11. Ejecuta el contenedor `core` con los botones de la interfaz. Espera a que el icono se ponga de color verde.
 
@@ -162,6 +166,7 @@ Al entrar en la página pueden loguearse con Google y se les creara automáticam
 1. Instalar `Ubuntu20.04`. Utilizar los comandos:
 ```bash
 sudo apt update
+sudo apt upgrade
 sudo apt install software-properties-common
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt install vim curl wget gpg gnupg2 software-properties-common apt-transport-https lsb-release ca-certificates
@@ -171,8 +176,8 @@ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)
 sudo apt update
 sudo apt install python3.11 python3-pip python3-venv python3-dev libpq-dev postgresql postgresql-contrib
 
-sudo git clone https://github.com/EricMannalich/Catalogo.git
-cd ~/core
+sudo git clone https://github.com/EricMannalich/catalog_series.git
+cd ~/catalog_series
 sudo -H pip3 install --upgrade pip
 sudo python3 -m venv env
 source env/bin/activate
@@ -181,8 +186,11 @@ sudo pip3 install -r requirements.txt
 sudo -u postgres psql
 CREATE DATABASE Media;
 ALTER USER postgres WITH PASSWORD 'postgres';
-\q
-pg_restore -h 127.0.0.1 -U postgres -d Media ./bd_backup/Media.sql
+\
+
+sudo python3 manage.py makemigrations #Prepara los cambios de la BD
+sudo python3 manage.py migrate        #Efectua los cambios de la BD
+sudo python3 manage.py serie --import #Importa la BD con los archibos de la carpeta bd_backup
 
 ```
 
