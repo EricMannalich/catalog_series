@@ -1,0 +1,15 @@
+.dockerignore
+*.pyc
+__pycache__
+Dockerfile
+docker-compose.yml
+.git
+.vscode
+commands.txt
+README.md
+bd_backup
+static
+run.bat
+compose-dev.yaml
+.env
+env

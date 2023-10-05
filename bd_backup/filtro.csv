@@ -1,0 +1,7 @@
+﻿modifieddate,nombre,descripcion,url,localStorageKey,clasificacion
+2023-10-04,Color,,color/,color_carta,LISTAR
+2023-09-19,Fecha,,checkedTimeInicio,checkedTimeFin,FECHA
+2023-09-18,Género,,genero/,genero,LISTAR
+2023-09-19,Ordenar,,colorFormatListNumberedIcon,orden,ORDENAR
+2023-09-19,Puntuación,,colorStarIco,valueRating,PUNTUACION
+2023-09-19,Transmisión,,colorCellTowerIcon,tansmicion,TRANSMISION

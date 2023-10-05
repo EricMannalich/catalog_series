@@ -1,0 +1,68 @@
+version: '3.8'
+
+x-database-variables: &database-variables
+    POSTGRES_BD: Media
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+
+x-app-variables: &app-variables
+    <<: *database-variables
+    POSTGRES_HOST: postgres-animecard
+    #SECRET_KEY: "xuT<llqg<k4xUGHd"
+    #ALLOWED_HOSTS: "*"
+    #CSRF_TRUSTED_ORIGINS: "https://127.0.0.1:443"
+    #DEBUG: 0
+    #DEFAULT_PERMISSION_ENV: "rest_framework.permissions.IsAuthenticated"
+    #CSRF_COOKIE_SECURE: 1
+    #SESSION_COOKIE_SECURE: 1
+    #SECURE_HSTS_SECONDS: 31536000
+    #SECURE_SSL_REDIRECT: 1
+    #CORS_ORIGIN_ALLOW_ALL: 0
+    #CORS_ALLOWED_ORIGINS: "https://127.0.0.1:443"
+    #CORS_ORIGIN_WHITELIST: "https://127.0.0.1:443"
+    #CORS_ALLOWED_ORIGINS_REGEXE: ""
+
+services:
+    postgres-animecard:
+        image: postgres:15
+        container_name: postgres-animecard
+        environment: *database-variables
+        volumes:
+            - postgres_15_animecard_data:/var/lib/postgresql/data/
+        ports: 
+            - "5433:5432"
+
+    django-animecard: 
+        image: animecard:latest
+        container_name: django-animecard
+        environment: *app-variables
+        volumes: 
+            - static:/code/static
+            - .:/code
+            - ssl:/etc/ssl
+        ports: 
+            - 80:80
+            - 443:443
+        command: bash -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn -c gunicorn_conf.py"
+        depends_on:
+            - postgres-animecard
+
+    #nginx:
+        #image: nginx
+        #container_name: nginx-media
+        #ports:
+        #    - "80:80"
+        #    - "443:443"
+        #volumes:
+        #    - ssl:/etc/ssl
+        #    - ./config/nginx/conf.d:/etc/nginx/conf.d
+        #    - static:/code/static
+        #depends_on:
+        #    - django
+
+
+volumes:
+    .:
+    postgres_15_animecard_data:
+    ssl:
+    static:

@@ -1,0 +1,4 @@
+﻿modifieddate,nombre,descripcion,url,image,clasificacion,content,orden
+2023-10-04,Inicio,,inicio,icons/inicio.png,INFO,"<p style=""text-align: justify;"">El proyecto prensentado, titulado REPERTORIO DE SERIES ANIMES (1990 &ndash; actualidad) pretende reunir en una base de datos unitaria, accesible como <em>web page</em> y en r&eacute;gimen abierto, la informaci&oacute;n relevante a las series animes transmitidas a partir de 1990. El punto fuerte del sitio web se encuentra en las opciones de filtrado y b&uacute;squeda de series.</p>
+<p style=""text-align: justify;"">El proyecto es un instrumento de investigaci&oacute;n sin fines de lucro con el objetivo de aprendizaje en la programaci&oacute;n web. Se podr&aacute; descargar el c&oacute;digo del citio en GitHub. Para no infringir derechos de autor, no se proporcionar&aacute; links de descarga o visualizaci&oacute;n.</p>",0
+2023-09-20,Catálogo,,serie,icons/revista.png,LISTAR,,1

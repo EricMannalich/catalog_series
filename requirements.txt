@@ -1,0 +1,11 @@
+django-cors-headers
+django-simple-history
+django-queryset-csv
+django-tinymce
+djoser
+gunicorn
+Pillow
+psycopg2-binary
+pymemcache
+python-decouple
+python-memcached
