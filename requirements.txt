@@ -1,3 +1,4 @@
+beautifulsoup4
 django-cors-headers
 django-simple-history
 django-queryset-csv

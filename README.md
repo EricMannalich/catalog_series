@@ -144,17 +144,9 @@ Responder las preguntas del comando anterior y después ejecutar:
 *	Username: postgres
 *	Password: postgres
 
-10. Accede al servidor anterior y crea una nueva BD llamada `Media` y carga la salva que está en `bd_backup` con los siguientes comandos:
+10. Ejecuta el contenedor `core` con los botones de la interfaz. Espera a que el icono se ponga de color verde.
 
-```bash
-python manage.py makemigrations #Prepara los cambios de la BD
-python manage.py migrate        #Efectua los cambios de la BD
-python manage.py serie --import #Importa la BD con los archibos de la carpeta bd_backup
-```
-
-11. Ejecuta el contenedor `core` con los botones de la interfaz. Espera a que el icono se ponga de color verde.
-
-12. Pueden crearse su propio usuario utilizando el comando (con la opción `Terminal` del paso 8):
+11. Pueden crearse su propio usuario utilizando el comando (con la opción `Terminal` del paso 8):
 
 ```bash
   python manage.py createsuperuser

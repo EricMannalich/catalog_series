@@ -43,7 +43,7 @@ services:
         ports: 
             - 80:80
             - 443:443
-        command: bash -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn -c gunicorn_conf.py"
+        command: bash -c "python manage.py migrate && python manage.py serie --import && python manage.py collectstatic --noinput && gunicorn -c gunicorn_conf.py"
         depends_on:
             - postgres-animecard
 
