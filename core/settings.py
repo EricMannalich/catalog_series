@@ -94,13 +94,23 @@ TEMPLATES = [
 
 DEFAULT_PERMISSION_ENV = os.environ.get('DEFAULT_PERMISSION_ENV', default="rest_framework.permissions.AllowAny")
 
+DEFAULT_RENDERER_CLASSES = (
+    'rest_framework.renderers.JSONRenderer',
+)
+
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         SOCIAL_AUTH_DEFAULT_AUTHENTICATION_CLASSES,
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         DEFAULT_PERMISSION_ENV,
-    )
+    ),
+    'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES
+    
 }
 
 # Database

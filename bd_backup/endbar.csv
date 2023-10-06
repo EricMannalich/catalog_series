@@ -1,5 +1,6 @@
 ﻿modifieddate,nombre,descripcion,url,image,orden
 2023-10-05,Amazon Web Services,AWS Free Tier,https://aws.amazon.com/,endbar/aws.png,10
+2023-10-06,NGINX,NGINX v1.21,https://www.nginx.com/,endbar/nginx.png,13
 2023-10-05,Gunicorn,Gunicorn v21,https://gunicorn.org/,endbar/gunicorn.png,15
 2023-10-05,Google Cloud,OAuth 2.0 Client IDs,https://console.cloud.google.com/,endbar/google_cloud.png,18
 2023-10-05,Django,Django v4,https://www.djangoproject.com/,endbar/django.png,20
