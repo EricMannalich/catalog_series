@@ -57,18 +57,18 @@ class SerieSerializerDetail(SerieSerializer):
             list_generos_nombres.append(genero.nombre)
         
         if instance.emision:
-            emision = 'Saliendo'
+            emision = 'Leaving'
         else:
-            emision = 'Terminada'
+            emision = 'Finished'
         year = instance.fecha_salida.year
         month = int(instance.fecha_salida.month)
-        temporada = "Invierno"
+        temporada = "Winter"
         if month > 2 and month < 6:
-            temporada = "Primavera"
+            temporada = "Spring"
         if month > 5 and month < 9:
-            temporada = "Verano"
+            temporada = "Summer"
         if month > 8 and month < 12:
-            temporada = "Otoño"
+            temporada = "Fall"
         return {
             'id': instance.id,
             'nombre': instance.nombre,
@@ -77,7 +77,7 @@ class SerieSerializerDetail(SerieSerializer):
             'sinopsis': instance.sinopsis,
             'emision': emision,
             'fecha_salida': year,
-            'temporada': "Temporada "+ temporada + " del " + str(year),
+            'temporada': temporada + " " + str(year) + " Season",
             'promedio_puntuaciones': instance.promedio_puntuaciones,
             #'promedio_puntuaciones_imdb': instance.promedio_puntuaciones_imdb,
             'link_imdb': instance.link_imdb if instance.link_imdb else "https://www.imdb.com/",

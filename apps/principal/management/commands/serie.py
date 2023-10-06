@@ -7,6 +7,7 @@ from djqscsv import write_csv
 
 from apps.principal.models import *
 from apps.base.models import *
+from apps.principal.scraper import *
 
 BD_EXPORT = settings.BD_ROOT
 BD_MENU = BD_EXPORT + "/menu.csv"
@@ -16,6 +17,7 @@ BD_COLOR = BD_EXPORT + "/color.csv"
 BD_GENERO = BD_EXPORT + "/genero.csv"
 BD_CATEGORIA = BD_EXPORT + "/categoria.csv"
 BD_SERIE = BD_EXPORT + "/serie.csv"
+
 
 def importMenu():
     Model = Menu
@@ -337,6 +339,12 @@ class Command(BaseCommand):
             action='store_true',
             help='actualiza las series',
             )
+        
+        parser.add_argument(
+            '--download', 
+            action='store_true',
+            help='actualiza las series con info online',
+            )
     
     def handle(self, *args, **options):
         if options['import']:
@@ -376,3 +384,6 @@ class Command(BaseCommand):
             for serie in series:
                 serie.save()
                 self.stdout.write(self.style.SUCCESS('Se actualiso la serie: ' + str(serie.nombre)))
+
+        if options['download']:
+            update_imdb()

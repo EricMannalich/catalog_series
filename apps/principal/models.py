@@ -77,6 +77,7 @@ class Serie(BaseModel):
         return self.nombre
 
     def save(self, *args, **kwargs):
+        #Color
         cantidad_episodios = self.cantidad_episodios
         color_carta = "grey"
         if cantidad_episodios <= 0:
@@ -99,6 +100,26 @@ class Serie(BaseModel):
         model_color = Color.objects.filter(nombre = color_carta).first()
         if model_color:
             self.color = model_color
+
+        #Puntuacion
+        puntuaciones = Puntuacion.objects.filter(serie = self)
+        suma_puntuaciones = 0
+        for puntuacion in puntuaciones:
+            suma_puntuaciones = suma_puntuaciones + int(puntuacion.puntuacion)
+        puntuaciones_cont = puntuaciones.count()
+
+        promedio_puntuaciones_imdb = self.promedio_puntuaciones_imdb
+        if promedio_puntuaciones_imdb > 0:
+            suma_puntuaciones = suma_puntuaciones + promedio_puntuaciones_imdb
+            puntuaciones_cont = puntuaciones_cont + 1
+
+        if puntuaciones_cont > 0:
+            promedio_puntuaciones = suma_puntuaciones/puntuaciones_cont
+        else:
+            promedio_puntuaciones = 0
+        self.promedio_puntuaciones = promedio_puntuaciones
+
+        #Guardar
         super().save(*args, **kwargs)
 
 class Episodio(BaseModel):
@@ -133,17 +154,20 @@ class Puntuacion(BaseModel):
         super().save(*args, **kwargs)
         #Guardar el prommedio de las puntuaciones de la serie
         puntuaciones = Puntuacion.objects.filter(serie = self.serie)
-        #print(puntuaciones)
         suma_puntuaciones = 0
         for puntuacion in puntuaciones:
             suma_puntuaciones = suma_puntuaciones + int(puntuacion.puntuacion)
         puntuaciones_cont = puntuaciones.count()
+
+        serie = Serie.objects.filter(id = self.serie.id).first()
+        promedio_puntuaciones_imdb = serie.promedio_puntuaciones_imdb
+        if promedio_puntuaciones_imdb > 0:
+            suma_puntuaciones = suma_puntuaciones + promedio_puntuaciones_imdb
+            puntuaciones_cont = puntuaciones_cont + 1
+
         if puntuaciones_cont > 0:
             promedio_puntuaciones = suma_puntuaciones/puntuaciones_cont
         else:
             promedio_puntuaciones = 0
-        serie = Serie.objects.filter(id = self.serie.id).first()
-        #print(promedio_puntuaciones)
         serie.promedio_puntuaciones = promedio_puntuaciones
-        #print(serie)
         serie.save()
