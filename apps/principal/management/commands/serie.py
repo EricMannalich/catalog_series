@@ -202,6 +202,7 @@ def importSerie():
                 continue
             cantidad_episodios = int(row['cantidadepisodios'].strip())
             link_imdb = row['linkimdb'].strip()
+            promedio_puntuaciones_imdb = float(row['promedio_puntuaciones_imdb'].strip())
             new_date = datetime.date(datetime.strptime(modified_date, "%Y-%m-%d"))
             un_obj = Model.objects.filter(nombre = nombre).first()
             if un_obj:
@@ -218,10 +219,11 @@ def importSerie():
                     un_obj.categoria = categoria
                     un_obj.cantidad_episodios = cantidad_episodios
                     un_obj.link_imdb = link_imdb
+                    un_obj.promedio_puntuaciones_imdb = promedio_puntuaciones_imdb
                     un_obj.save()
                     #print("update serie " + nombre + " con genero " + genero_str )
             else:
-                insert = Model(nombre = nombre,sinopsis = sinopsis,emision = emision,image = image,fecha_salida = fecha_salida,categoria = categoria,cantidad_episodios = cantidad_episodios,link_imdb = link_imdb)
+                insert = Model(nombre = nombre,sinopsis = sinopsis,emision = emision,image = image,fecha_salida = fecha_salida,categoria = categoria,cantidad_episodios = cantidad_episodios,link_imdb = link_imdb,promedio_puntuaciones_imdb = promedio_puntuaciones_imdb)
                 insert.save()
                 insert.genero.add(genero)
                 #print("create serie " + nombre + " con genero " + genero_str )
@@ -315,6 +317,7 @@ def exportSerie():
         'categoria__nombre',
         'genero__nombre',
         'cantidad_episodios',
+        'promedio_puntuaciones_imdb',
         'link_imdb').order_by('nombre')
     if all_obj:
         with open(BD_SERIE,'wb') as csv_file:

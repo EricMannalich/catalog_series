@@ -8,7 +8,6 @@ x-database-variables: &database-variables
 x-app-variables: &app-variables
     <<: *database-variables
     POSTGRES_HOST: postgres-animecard
-    #SECRET_KEY: "xuT<llqg<k4xUGHd"
     #ALLOWED_HOSTS: "*"
     #CSRF_TRUSTED_ORIGINS: "https://127.0.0.1:443"
     #DEBUG: 0
@@ -41,11 +40,24 @@ services:
             - .:/code
             - ssl:/etc/ssl
         ports: 
-            - 80:80
-            - 443:443
-        command: bash -c "python manage.py migrate && python manage.py serie --import && python manage.py collectstatic --noinput && gunicorn -c gunicorn_conf.py"
+            - 8080:8080
+        command: bash -c "python manage.py migrate && python manage.py serie --import && python manage.py collectstatic --noinput && gunicorn -c config/gunicorn/conf.py"
         depends_on:
             - postgres-animecard
+
+    nginx:
+        image: nginx:latest
+        container_name: nginx-animecard
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ssl:/etc/ssl
+            - ./config/nginx/conf.d:/etc/nginx/conf.d
+            - static:/code/static
+            - ./media:/code/media
+        depends_on:
+            - django-animecard
 
 volumes:
     .:

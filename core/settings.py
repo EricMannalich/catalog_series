@@ -25,7 +25,7 @@ WSGI_APPLICATION = PROYECT_NAME + '.wsgi.application'
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', default = config('DJANGO_SECRET_KEY', default='e154c3b8-0b5b-4dca-8f2d-08cbc07fda82'))
+SECRET_KEY = config('DJANGO_SECRET_KEY', default='e154c3b8-0b5b-4dca-8f2d-08cbc07fda82')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get('DEBUG', default="1")))

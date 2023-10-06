@@ -66,7 +66,7 @@ class Serie(BaseModel):
     color = models.ForeignKey(Color, on_delete=models.CASCADE,db_index=True, blank=True, null=True)
     cantidad_episodios = models.IntegerField("cantidadepisodios",default = 0)
     link_imdb = models.URLField("linkimdb",blank=True, null=True)
-    promedio_puntuaciones_imdb = models.DecimalField(max_digits=3, decimal_places=1, default = 0)
+    promedio_puntuaciones_imdb = models.DecimalField("promedio_puntuaciones_imdb",max_digits=3, decimal_places=1, default = 0)
 
     class Meta:
         verbose_name = 'Serie'

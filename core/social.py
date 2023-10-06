@@ -59,7 +59,7 @@ AUTHENTICATION_BACKENDS = (
 
     # Facebook OAuth2
     #'social_core.backends.facebook.FacebookAppOAuth2',
-    'social_core.backends.facebook.FacebookOAuth2',
+    #'social_core.backends.facebook.FacebookOAuth2',
 
     # Instagram OAuth2
     #'social_core.backends.instagram.InstagramOAuth2',
