@@ -56,7 +56,7 @@ class Color(BaseModel):
 
 class Serie(BaseModel):
     nombre = models.CharField(max_length=255, unique=True,db_index=True)
-    genero = models.ManyToManyField(Genero, blank=True, null=True)
+    genero = models.ManyToManyField(Genero, blank=True)
     sinopsis = models.TextField(blank=True, null=True, db_index=True)
     emision = models.BooleanField()
     fecha_salida = models.DateField("fechasalida")

@@ -17,7 +17,7 @@ from core.social import *
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-PROYECT_NAME = os.environ.get('PROYECT_NAME', default="core")
+PROYECT_NAME = os.environ.get('PROYECT_NAME', default=config('PROYECT_NAME', default='core'))
 ROOT_URLCONF = PROYECT_NAME + '.urls'
 WSGI_APPLICATION = PROYECT_NAME + '.wsgi.application'
 
@@ -28,10 +28,10 @@ WSGI_APPLICATION = PROYECT_NAME + '.wsgi.application'
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='e154c3b8-0b5b-4dca-8f2d-08cbc07fda82')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(os.environ.get('DEBUG', default="1")))
+DEBUG = bool(int(os.environ.get('DEBUG', default=config('DEBUG', default='1'))))
 
 ALLOWED_HOSTS = []
-ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS')
+ALLOWED_HOSTS_ENV = os.environ.get('ALLOWED_HOSTS', default=config('ALLOWED_HOSTS', default='localhost'))
 if ALLOWED_HOSTS_ENV:
     ALLOWED_HOSTS.extend(ALLOWED_HOSTS_ENV.split(','))
 
@@ -92,7 +92,7 @@ TEMPLATES = [
     },
 ]
 
-DEFAULT_PERMISSION_ENV = os.environ.get('DEFAULT_PERMISSION_ENV', default="rest_framework.permissions.AllowAny")
+DEFAULT_PERMISSION_ENV = "rest_framework.permissions.IsAuthenticated"
 
 DEFAULT_RENDERER_CLASSES = (
     'rest_framework.renderers.JSONRenderer',
@@ -102,6 +102,8 @@ if DEBUG:
     DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
         'rest_framework.renderers.BrowsableAPIRenderer',
     )
+    DEFAULT_PERMISSION_ENV = 'rest_framework.permissions.AllowAny'
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         SOCIAL_AUTH_DEFAULT_AUTHENTICATION_CLASSES,
@@ -175,37 +177,44 @@ AUTH_USER_MODEL = 'users.User'
 
 
 # Security
-CSRF_COOKIE_SECURE = bool(int(os.environ.get('CSRF_COOKIE_SECURE', default="0")))
+CSRF_COOKIE_SECURE = True
 
 CSRF_TRUSTED_ORIGINS = []
-CSRF_TRUSTED_ORIGINS_ENV = os.environ.get('CSRF_TRUSTED_ORIGINS')
+CSRF_TRUSTED_ORIGINS_ENV = os.environ.get('CSRF_TRUSTED_ORIGINS', default=config('CSRF_TRUSTED_ORIGINS', default=""))
 if CSRF_TRUSTED_ORIGINS_ENV:
     CSRF_TRUSTED_ORIGINS.extend(CSRF_TRUSTED_ORIGINS_ENV.split(','))
 
-SESSION_COOKIE_SECURE = bool(int(os.environ.get('SESSION_COOKIE_SECURE', default="0")))
+SESSION_COOKIE_SECURE = True
 
-SECURE_HSTS_SECONDS = os.environ.get('SECURE_HSTS_SECONDS', default=0)
+SECURE_HSTS_SECONDS = os.environ.get('SECURE_HSTS_SECONDS', default=config('SECURE_HSTS_SECONDS', default=0))
 
 SECURE_SSL_REDIRECT = bool(int(os.environ.get('SECURE_SSL_REDIRECT', default="0")))
 
-SECURE_SSL_HOST = os.environ.get('SECURE_SSL_HOST', default="")
+SECURE_SSL_HOST = os.environ.get('SECURE_SSL_HOST', default=config('SECURE_SSL_HOST', default=""))
 
-CORS_ORIGIN_ALLOW_ALL = bool(int(os.environ.get('CORS_ORIGIN_ALLOW_ALL', default="1")))
+CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ALLOW_CREDENTIALS = bool(int(os.environ.get('CORS_ORIGIN_ALLOW_ALL', default="1")))#new
+CORS_ALLOW_CREDENTIALS = False
+
+if DEBUG:
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+    SECURE_SSL_REDIRECT = False
+    CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = []
-CORS_ALLOWED_ORIGINS_ENV = os.environ.get('CORS_ALLOWED_ORIGINS')
+CORS_ALLOWED_ORIGINS_ENV = os.environ.get('CORS_ALLOWED_ORIGINS', default=config('CORS_ALLOWED_ORIGINS', default=""))
 if CORS_ALLOWED_ORIGINS_ENV:
     CORS_ALLOWED_ORIGINS.extend(CORS_ALLOWED_ORIGINS_ENV.split(','))
 
 CORS_ORIGIN_WHITELIST = []
-CORS_ORIGIN_WHITELIST_ENV = os.environ.get('CORS_ORIGIN_WHITELIST')
+CORS_ORIGIN_WHITELIST_ENV = os.environ.get('CORS_ORIGIN_WHITELIST', default=config('CORS_ORIGIN_WHITELIST', default=""))
 if CORS_ORIGIN_WHITELIST_ENV:
     CORS_ORIGIN_WHITELIST.extend(CORS_ORIGIN_WHITELIST_ENV.split(','))
 
 CORS_ALLOWED_ORIGINS_REGEXE = []
-CORS_ALLOWED_ORIGINS_REGEXE_ENV = os.environ.get('CORS_ALLOWED_ORIGINS_REGEXE')
+CORS_ALLOWED_ORIGINS_REGEXE_ENV = os.environ.get('CORS_ALLOWED_ORIGINS_REGEXE', default=config('CORS_ALLOWED_ORIGINS_REGEXE', default=""))
 if CORS_ALLOWED_ORIGINS_REGEXE_ENV:
     CORS_ALLOWED_ORIGINS_REGEXE.extend(CORS_ALLOWED_ORIGINS_REGEXE_ENV.split(','))
 

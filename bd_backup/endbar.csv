@@ -4,6 +4,7 @@
 2023-10-05,Gunicorn,Gunicorn v21,https://gunicorn.org/,endbar/gunicorn.png,15
 2023-10-05,Google Cloud,OAuth 2.0 Client IDs,https://console.cloud.google.com/,endbar/google_cloud.png,18
 2023-10-05,Django,Django v4,https://www.djangoproject.com/,endbar/django.png,20
+2023-10-07,PostgreSQL,PostgreSQL v15,https://www.postgresql.org/,endbar/postgresql.png,21
 2023-10-05,Python,Python v3.11,https://www.python.org/,endbar/python.png,30
 2023-10-05,Material UI,Material UI v5,https://mui.com/,endbar/materialUI.png,35
 2023-10-05,React,React v18,https://react.dev/,endbar/react.png,40

@@ -184,7 +184,14 @@ When you enter the site you can log in with Google and a non-administrative user
 
 ## Pasos para ejecutar en modo despliegue online (LINUX):
 
-1. Install `Ubuntu20.04`. Use the commands:
+https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-22-04
+
+https://realpython.com/django-nginx-gunicorn/
+
+https://abhishekm47.medium.com/how-to-deploy-the-flask-django-app-on-aws-ec2-with-gunicorn-ngnix-with-free-ssl-certificate-566b2ada3b6a
+
+1. Install `Ubuntu22.04` and the necessary applications. Use the commands:
+
 ```bash
 sudo apt update
 sudo apt upgrade
@@ -195,25 +202,277 @@ sudo apt policy postgresql
 sudo curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 sudo apt update
-sudo apt install python3.11 python3-pip python3-venv python3-dev libpq-dev postgresql postgresql-contrib
+sudo apt install python3.11 python3-pip python3-venv python3-dev libpq-dev postgresql postgresql-contrib nginx
+```
 
-sudo git clone https://github.com/EricMannalich/catalog_series.git
+2. Clone the repository, create a virtual environment and install the dependencies. Use the commands:
+
+```bash
+git clone https://github.com/EricMannalich/catalog_series.git
 cd ~/catalog_series
-sudo -H pip3 install --upgrade pip
 sudo python3 -m venv env
 source env/bin/activate
-sudo pip3 install -r requirements.txt
+-H pip3 install --upgrade pip
+pip3 install -r requirements.txt
+```
+3. They must create an `.env` file with the application credentials:
 
+```bash
+# Django
+DJANGO_SECRET_KEY = "<your app key goes here>"
+PROYECT_NAME = "core"
+DEBUG = "0"
+ALLOWED_HOSTS = "localhost"
+CSRF_TRUSTED_ORIGINS = "https://localhost"
+SECURE_HSTS_SECONDS = "31536000"
+SECURE_SSL_HOST = "https://localhost"
+CORS_ALLOWED_ORIGINS = "http://localhost"
+CORS_ORIGIN_WHITELIST = "http://localhost"
+CORS_ALLOWED_ORIGINS_REGEXE = ""
+IS_STATIC_SERVER = "0"
+
+# Postgres
+POSTGRES_CLIENT_BD = "Media"
+POSTGRES_CLIENT_USER = "mediacard"
+POSTGRES_CLIENT_PASSWORD = "postgres"
+
+# Google
+GOOGLE_CLIENT_KEY = "<your app key goes here>"
+GOOGLE_CLIENT_SECRET = "your app secret goes here"
+```
+
+4. Prepare the `PostgreSQL` database, the data must match the `.env` file from the previous step. Use the commands:
+
+```bash
 sudo -u postgres psql
 CREATE DATABASE Media;
-ALTER USER postgres WITH PASSWORD 'postgres';
-\
+#ALTER USER postgres WITH PASSWORD 'postgres';
+CREATE USER mediacard WITH PASSWORD 'postgres';
+ALTER ROLE mediacard SET client_encoding TO 'utf8';
+ALTER ROLE mediacard SET default_transaction_isolation TO 'read committed';
+ALTER ROLE mediacard SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE Media TO mediacard;
+\q
 
-sudo python3 manage.py makemigrations #Prepara los cambios de la BD
-sudo python3 manage.py migrate        #Efectua los cambios de la BD
-sudo python3 manage.py serie --import #Importa la BD con los archibos de la carpeta bd_backup
-
+sudo python3 manage.py makemigrations #Prepare DB changes
+sudo python3 manage.py migrate        #Performs DB changes
+sudo python3 manage.py serie --import #Import the DB with the files in the bd_backup folder.
 ```
+
+5. Creating systemd Socket and Service Files for Gunicorn:
+
+```bash
+sudo nano /etc/systemd/system/gunicorn.socket
+```
+
+6. Inside, you will create a `[Unit]` section to describe the socket, a `[Socket]` section to define the socket location, and an `[Install]` section to make sure the socket is created at the right time:
+
+```bash
+[Unit]
+Description=gunicorn socket
+
+[Socket]
+ListenStream=/run/gunicorn.sock
+
+[Install]
+WantedBy=sockets.target
+```
+
+7. Next, create and open a systemd service file for Gunicorn with sudo privileges in your text editor. The service filename should match the socket filename with the exception of the extension:
+
+```bash
+sudo nano /etc/systemd/system/gunicorn.service
+```
+8. Start with the `[Unit]` section, which is used to specify metadata and dependencies. Put a description of the service here and tell the init system to only start this after the networking target has been reached. Because your service relies on the socket from the socket file, you need to include a Requires directive to indicate that relationship.
+
+Next, you’ll open up the `[Service]` section. Specify the user and group that you want to process to run under. You will give your regular user account ownership of the process since it owns all of the relevant files. You’ll give group ownership to the www-data group so that Nginx can communicate easily with Gunicorn.
+
+Finally, you’ll add an `[Install]` section. This will tell systemd what to link this service to if you enable it to start at boot. You want this service to start when the regular multi-user system is up and running.
+
+```bash
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/catalog_series
+ExecStart=/home/ubuntu/catalog_series/env/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          core.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+```
+9. You can now start and enable the Gunicorn socket. This will create the socket file at /run/gunicorn.sock now and at boot. When a connection is made to that socket, systemd will automatically start the gunicorn.service to handle it:
+
+```bash
+sudo systemctl start gunicorn.socket
+sudo systemctl enable gunicorn.socket
+```
+
+10. Creating and opening a new server block in Nginx’s sites-available directory:
+
+```bash
+sudo nano /etc/nginx/sites-available/catalog_series
+```
+
+11. Inside, open up a new server block. You will start by specifying that this block should listen on the normal port 80 and that it should respond to your server’s domain name or IP address. Next, you will tell Nginx to ignore any problems with finding a favicon. You will also tell it where to find the static assets. Finally, create a location / {} block to match all other requests. Inside of this location, you’ll include the standard proxy_params file included with the Nginx installation and then pass the traffic directly to the Gunicorn socket:
+
+```bash
+server {
+    listen 80;
+    listen 443;
+    server_name localhost;#IP publica del servidor
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    
+    location /static/ {
+        autoindex on;
+        root /home/ubuntu/catalog_series/static/;
+    }
+
+    location /media/ {
+        autoindex on;
+        root /home/ubuntu/catalog_series/media/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
+
+}
+```
+
+12. Save and close the file when you are finished. Now, you can enable the file by linking it to the sites-enabled directory:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/catalog_series /etc/nginx/sites-enabled
+sudo gpasswd -a www-data ubuntu
+sudo systemctl restart nginx
+#sudo systemctl start nginx
+#sudo systemctl enable nginx
+sudo ufw allow 'Nginx Full'
+sudo service gunicorn restart
+sudo service nginx restart
+```
+
+13. HTTPS
+```bash
+sudo snap install --classic certbot
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
+sudo certbot --nginx --rsa-key-size 4096 --no-redirect
+sudo nano /etc/nginx/sites-available/catalog_series
+```
+```bash
+...
+    location / {
+        return 301 https://$host$request_uri;
+    }
+
+    listen 443 default ssl;
+    ssl_certificate /etc/letsencrypt/live/<DNS_PAGE>/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/<DNS_PAGE>/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_ecdh_curve secp384r1;
+    ssl_session_cache shared:SSL:15m;
+    ssl_session_tickets off;
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    resolver 1.1.1.1 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 5s;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubdomains";
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    client_max_body_size 1M;
+...
+```
+```bash
+sudo systemctl restart nginx
+```
+
+
+
+
+#Plan B:
+```bash
+sudo apt install supervisor
+cd /etc/supervisor/conf.d/
+sudo touch gunicorn.conf
+sudo nano gunicorn.conf
+```
+```bash
+[program:gunicorn]
+directory=/home/ubuntu/catalog_series
+command=/home/ubuntu/catalog_series/env/bin/gunicorn \
+          --workers 3 \
+          --bind unix:/home/ubuntu/catalog_series/app.sock \
+          core.wsgi:application
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/gunicorn/gunicorn.err.log
+stdout_logfile=/var/log/gunicorn/gunicorn.outt.log
+
+[group:guni]
+programs:gunicorn
+```
+
+```bash
+sudo mkdir /var/log/gunicorn
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo nano /etc/nginx/nginx.conf
+```
+```bash
+user root;
+......
+```
+```bash
+cd /etc/nginx/sites-available/
+sudo touch django.conf
+sudo nano django.conf
+```
+```bash
+server {
+    listen 80;
+    listen 443;
+    server_name localhost;#IP publica del servidor
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    
+    location /static/ {
+        autoindex on;
+        root /home/ubuntu/catalog_series/static/;
+    }
+
+    location /media/ {
+        autoindex on;
+        root /home/ubuntu/catalog_series/media/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/ubuntu/catalog_series/app.sock;
+    }
+
+}
+```
+```bash
+sudo ln django.conf /etc/nginx/sites-available
+sudo service nginx restart
+```
+
+
+#GUNICORN Direct Plan C
 
 2.	You can copy the SSL security certificates to the corresponding folders to use the HTTPS secure protocol:
 * '/etc/ssl/certs/selfsigned.crt' * '/etc/ssl/certs/selfsigned.crt'
@@ -248,20 +507,5 @@ Save the changes and reboot the system:
 
 ```bash
   python manage.py createsuperuser
-```
-15. They must create an `.env` file with the application credentials:
-
-```bash
-# Django
-DJANGO_SECRET_KEY = "<your app key goes here>"
-
-# Postgres
-POSTGRES_CLIENT_BD = "Media"
-POSTGRES_CLIENT_USER = "postgres"
-POSTGRES_CLIENT_PASSWORD = "postgres"
-
-# Google
-GOOGLE_CLIENT_KEY = "<your app key goes here>"
-GOOGLE_CLIENT_SECRET = "your app secret goes here"
 ```
 When you enter the site you can log in with Google and a non-administrative user will be created automatically.

@@ -33,19 +33,14 @@ chdir = PROYECT_NAME
 #https://docs.djangoproject.com/en/4.2/ref/settings/
 os.environ["ALLOWED_HOSTS"] = MY_URL_DIRECCION + MY_URL_DIRECCION_ALTERNAS
 os.environ["DEBUG"] = "0"
-os.environ["CSRF_COOKIE_SECURE"] = "1"
 os.environ["CSRF_COOKIE_AGE"] = AGE_LOGIN
-os.environ["SESSION_COOKIE_SECURE"] = "1"
 os.environ["SECURE_HSTS_SECONDS"] = AGE_LOGIN
 os.environ["SECURE_SSL_REDIRECT"] = "0"#="1" para https y ="0" para http
 os.environ["SECURE_SSL_HOST"] = SECURE_SSL_HOST
-os.environ["CORS_ORIGIN_ALLOW_ALL"] = "0"
-#os.environ["CORS_ALLOW_CREDENTIALS"] = "0" #new
 os.environ["CSRF_TRUSTED_ORIGINS"] = SECURE_SSL_HOST
 os.environ["CORS_ALLOWED_ORIGINS"] = MY_URL
 os.environ["CORS_ORIGIN_WHITELIST"] = MY_URL
 os.environ["CORS_ALLOWED_ORIGINS_REGEXE"] = ""
-os.environ["DEFAULT_PERMISSION_ENV"] = "rest_framework.permissions.IsAuthenticated"
 
 #Django static server
 os.environ["IS_STATIC_SERVER"] = "0"

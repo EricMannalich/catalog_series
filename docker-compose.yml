@@ -41,7 +41,7 @@ services:
             - ssl:/etc/ssl
         ports: 
             - 8080:8080
-        command: bash -c "python manage.py migrate && python manage.py serie --import && python manage.py collectstatic --noinput && gunicorn -c config/gunicorn/conf.py"
+        command: bash -c "python manage.py migrate --noinput && python manage.py serie --import && python manage.py collectstatic --noinput && gunicorn -c config/gunicorn/conf.py"
         depends_on:
             - postgres-animecard
 
