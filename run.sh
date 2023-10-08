@@ -1,8 +1,7 @@
 #!/bin/bash
 cd /home/ubuntu/catalog_series/
-source env/bin/activate
 git pull
-python3 manage.py migrate --noinput
-python3 manage.py serie --import
-python3 manage.py collectstatic --noinput
+python manage.py migrate --noinput
+python manage.py serie --import
+python manage.py collectstatic --noinput
 gunicorn -c config/gunicorn/conf.py

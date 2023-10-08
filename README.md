@@ -188,8 +188,6 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postg
 
 https://realpython.com/django-nginx-gunicorn/
 
-https://abhishekm47.medium.com/how-to-deploy-the-flask-django-app-on-aws-ec2-with-gunicorn-ngnix-with-free-ssl-certificate-566b2ada3b6a
-
 1. Install `Ubuntu22.04` and the necessary applications. Use the commands:
 
 ```bash
@@ -203,7 +201,9 @@ sudo curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --de
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 sudo apt update
 sudo apt upgrade
-sudo apt install python3.11 python3-pip python3-venv python3-dev libpq-dev postgresql postgresql-contrib nginx
+sudo apt install python3.11 python3-pip python3.11-venv python3.11-dev libpq-dev python3.11-distutils python3.11-tk python3.11-gdbm python3.11-lib2to3 postgresql postgresql-contrib nginx
+
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
 ```
 
 2. Clone the repository, create a virtual environment and install the dependencies. Use the commands:
@@ -211,11 +211,11 @@ sudo apt install python3.11 python3-pip python3-venv python3-dev libpq-dev postg
 ```bash
 git clone https://github.com/EricMannalich/catalog_series.git
 cd ~/catalog_series
-#sudo python3 -m venv env
-#source env/bin/activate
-sudo -H pip3 install --upgrade pip
-sudo pip3 install -r requirements.txt
-
+python -m venv env
+source env/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+deactivate 
 
 sudo touch .env
 sudo nano .env
@@ -254,9 +254,10 @@ CREATE DATABASE mediacard;
 ALTER USER postgres WITH PASSWORD 'postgres';
 \q
 
-sudo python3 manage.py makemigrations #Prepare DB changes
-sudo python3 manage.py migrate        #Performs DB changes
-sudo python3 manage.py serie --import #Import the DB with the files in the bd_backup folder.
+python manage.py collectstatic --noinput
+python manage.py makemigrations #Prepare DB changes
+python manage.py migrate        #Performs DB changes
+python manage.py serie --import #Import the DB with the files in the bd_backup folder.
 ```
 
 5. Creating systemd Socket and Service Files for Gunicorn:
@@ -265,7 +266,7 @@ sudo python3 manage.py serie --import #Import the DB with the files in the bd_ba
 sudo nano /etc/systemd/system/gunicorn.socket
 ```
 
-6. Inside, you will create a `[Unit]` section to describe the socket, a `[Socket]` section to define the socket location, and an `[Install]` section to make sure the socket is created at the right time:
+6. Inside, 
 
 ```bash
 [Unit]
@@ -278,12 +279,12 @@ ListenStream=/run/gunicorn.sock
 WantedBy=sockets.target
 ```
 
-7. Next, create and open a systemd service file for Gunicorn with sudo privileges in your text editor. The service filename should match the socket filename with the exception of the extension:
+7. Next, 
 
 ```bash
 sudo nano /etc/systemd/system/gunicorn.service
 ```
-8. Start with the `[Unit]` section, which is used to specify metadata and dependencies. Put a description of the service here and tell the init system to only start this after the networking target has been reached. Because your service relies on the socket from the socket file, you need to include a Requires directive to indicate that relationship.
+8. Start 
 
 
 ```bash
@@ -330,12 +331,12 @@ server {
     
     location /static/ {
         autoindex on;
-        root /home/ubuntu/catalog_series/static/;
+        alias /home/ubuntu/catalog_series/static/;
     }
 
     location /media/ {
         autoindex on;
-        root /home/ubuntu/catalog_series/media/;
+        alias /home/ubuntu/catalog_series/media/;
     }
 
     location / {
@@ -351,11 +352,9 @@ server {
 ```bash
 sudo ln -s /etc/nginx/sites-available/catalog_series /etc/nginx/sites-enabled
 sudo gpasswd -a www-data ubuntu
+#sudo systemctl restart gunicorn
 sudo systemctl restart nginx
-#sudo systemctl start nginx
-#sudo systemctl enable nginx
 sudo ufw allow 'Nginx Full'
-sudo service gunicorn restart
 sudo service nginx restart
 ```
 
@@ -368,11 +367,21 @@ sudo nano /etc/nginx/sites-available/catalog_series
 ```
 ```bash
 ...
+    
+server {
+    listen 80;
+    server_name localhost;
+
+
     location / {
         return 301 https://$host$request_uri;
     }
+}
 
+
+server {
     listen 443 default ssl;
+    server_name localhost;
     ssl_certificate /etc/letsencrypt/live/<DNS_PAGE>/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/<DNS_PAGE>/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
@@ -391,6 +400,26 @@ sudo nano /etc/nginx/sites-available/catalog_series
     add_header X-Frame-Options DENY;
     add_header X-Content-Type-Options nosniff;
     client_max_body_size 1M;
+
+     location = /favicon.ico { access_log off; log_not_found off; }
+
+    location /static/ {
+        autoindex on;
+        alias /home/ubuntu/catalog_series/static/;
+    }
+
+    location /media/ {
+        autoindex on;
+        alias /home/ubuntu/catalog_series/media/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
+
+}
+
 ...
 ```
 ```bash
@@ -400,109 +429,3 @@ sudo systemctl restart nginx
 
 
 
-#Plan B:
-```bash
-sudo apt install supervisor
-cd /etc/supervisor/conf.d/
-sudo touch gunicorn.conf
-sudo nano gunicorn.conf
-```
-```bash
-[program:gunicorn]
-directory=/home/ubuntu/catalog_series
-command=/home/ubuntu/catalog_series/env/bin/gunicorn \
-          --workers 3 \
-          --bind unix:/home/ubuntu/catalog_series/app.sock \
-          core.wsgi:application
-autostart=true
-autorestart=true
-stderr_logfile=/var/log/gunicorn/gunicorn.err.log
-stdout_logfile=/var/log/gunicorn/gunicorn.outt.log
-
-[group:guni]
-programs:gunicorn
-```
-
-```bash
-sudo mkdir /var/log/gunicorn
-sudo supervisorctl reread
-sudo supervisorctl update
-sudo nano /etc/nginx/nginx.conf
-```
-```bash
-user root;
-......
-```
-```bash
-cd /etc/nginx/sites-available/
-sudo touch django.conf
-sudo nano django.conf
-```
-```bash
-server {
-    listen 80;
-    listen 443;
-    server_name localhost;#IP publica del servidor
-
-    location = /favicon.ico { access_log off; log_not_found off; }
-    
-    location /static/ {
-        autoindex on;
-        root /home/ubuntu/catalog_series/static/;
-    }
-
-    location /media/ {
-        autoindex on;
-        root /home/ubuntu/catalog_series/media/;
-    }
-
-    location / {
-        include proxy_params;
-        proxy_pass http://unix:/home/ubuntu/catalog_series/app.sock;
-    }
-
-}
-```
-```bash
-sudo ln django.conf /etc/nginx/sites-available
-sudo service nginx restart
-```
-
-
-#GUNICORN Direct Plan C
-
-2.	You can copy the SSL security certificates to the corresponding folders to use the HTTPS secure protocol:
-* '/etc/ssl/certs/selfsigned.crt' * '/etc/ssl/certs/selfsigned.crt'
-/etc/ssl/private/selfsigned.crt' * '/etc/ssl/private/selfsigned.key'.
-
-If these files are not available, they must be generated with the following commands:
-
-```bash
-  sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/selfsigned.key -out /etc/ssl/certs/selfsigned.crt
-```
-Answer the questions in the previous command and then execute:
-```bash
-  sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
-```
-
-3. You will have to program the automatic execution of the server:
-
-```bash
-  sudo crontab -e
-```
-It will open a text file, at the end you should add the following commands replacing `user` with the operating system user name:
-
-```bash
-  SHELL=/bin/bash
-  @reboot sh /home/<usuario>/core/run.sh
-```
-Save the changes and reboot the system:
-```bash
-  sudo reboot
-```
-4. You can create your own user using the command:
-
-```bash
-  python manage.py createsuperuser
-```
-When you enter the site you can log in with Google and a non-administrative user will be created automatically.
