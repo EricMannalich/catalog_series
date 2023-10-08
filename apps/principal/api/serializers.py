@@ -57,9 +57,9 @@ class SerieSerializerDetail(SerieSerializer):
             list_generos_nombres.append(genero.nombre)
         
         if instance.emision:
-            emision = 'Leaving'
+            emision = 'Running'
         else:
-            emision = 'Finished'
+            emision = 'Ended'
         year = instance.fecha_salida.year
         month = int(instance.fecha_salida.month)
         temporada = "Winter"

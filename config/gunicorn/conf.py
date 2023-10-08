@@ -17,19 +17,13 @@ bind = MY_URL_PUERTO
 backlog = 2048
 workers = multiprocessing.cpu_count() * 2 + 1
 loglevel = 'info'
-#errorlog = 'errorlog' #Para Docker
-#accesslog = 'accesslog' #Para Docker
+errorlog = 'errorlog' #Para Docker
+accesslog = 'accesslog' #Para Docker
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 wsgi_app = name + ".wsgi"
 chdir = PROYECT_NAME
 #certfile = '/etc/ssl/certs/selfsigned.crt'
 #keyfile = '/etc/ssl/private/selfsigned.key'
-
-#Bateo DOCKER
-accesslog = errorlog = "/var/log/gunicorn/dev.log"
-pidfile = "/var/run/gunicorn/dev.pid"
-daemon = True
-capture_output = True
 
 #Para generar llaves autofirmadas SSL (HTTPS), poner en la consola de linux y seguir instrucciones:
 #openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/selfsigned.key -out /etc/ssl/certs/selfsigned.crt

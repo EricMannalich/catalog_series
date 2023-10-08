@@ -1,7 +1,7 @@
 ﻿modifieddate,nombre,descripcion,url,localStorageKey,clasificacion
-2023-10-05,Color,,color/,color_carta,LISTAR
-2023-10-05,Date,,checkedTimeInicio,checkedTimeFin,FECHA
-2023-10-05,Genre,,genero/,genero,LISTAR
-2023-10-05,Order,,colorFormatListNumberedIcon,orden,ORDENAR
-2023-10-05,Score,,colorStarIco,valueRating,PUNTUACION
-2023-10-05,Transmission,,colorCellTowerIcon,tansmicion,TRANSMISION
+2023-10-08,Color,,color/,color_carta,LISTAR
+2023-10-08,Date,,checkedTimeInicio,checkedTimeFin,FECHA
+2023-10-08,Genre,,genero/,genero,LISTAR
+2023-10-08,Order,,colorFormatListNumberedIcon,orden,ORDENAR
+2023-10-08,Score,,colorStarIco,valueRating,PUNTUACION
+2023-10-08,Transmission,,colorCellTowerIcon,tansmicion,TRANSMISION

@@ -95,7 +95,10 @@ def get_filter_serie(self, request):
         if puntuacion:
             if puntuacion.isdigit():
                 int_puntuacion = int(puntuacion)
-                model = model.filter(promedio_puntuaciones__gte = int_puntuacion)
+                if int_puntuacion > 0:
+                    new_model = model.filter(promedio_puntuaciones = int_puntuacion)
+                    if new_model:
+                        model = new_model
 
         colores = request.GET.get('color_carta')
         if colores:
@@ -117,6 +120,10 @@ def get_filter_serie(self, request):
                 model = model.order_by('cantidad_episodios')
             elif (orden == "episodios_descendente"):
                 model = model.order_by('-cantidad_episodios')
+            elif (orden == "puntuacion_ascendente"):
+                model = model.order_by('promedio_puntuaciones')
+            elif (orden == "puntuacion_descendente"):
+                model = model.order_by('-promedio_puntuaciones')
     return model
 
 """def get_filter_generic(self, request):

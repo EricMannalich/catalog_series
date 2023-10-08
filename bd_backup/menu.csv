@@ -1,4 +1,4 @@
 ﻿modifieddate,nombre,descripcion,url,image,clasificacion,content,orden
-2023-10-05,Home,,inicio,icons/inicio.png,INFO,"<p>The project, entitled REPERTORIO DE SERIES ANIMES (1990 - present) aims to gather in a single database, accessible as a web page and in open mode, the information relevant to the anime series broadcasted since 1990. The strong point of the website lies in the filtering and search options for series.</p>
-<p>The project is a non-profit research tool with the objective of learning about web programming. The site's code will be available for download on GitHub. In order not to infringe copyrights, no download or viewing links will be provided.</p>",0
 2023-10-05,Catalog,,serie,icons/revista.png,LISTAR,,1
+2023-10-08,About,,about,icons/high_importance_32px.png,INFO,"<p>The project, entitled information relevant to the anime series broadcasted since 1990 in a single database, accessible as a web page and in open mode, the information relevant to the anime series broadcasted since 1990. The strong point of the website lies in the filtering and search options for series.</p>
+<p>The project is a non-profit research tool with the objective of learning about web programming. The site's code will be available for download on GitHub. In order not to infringe copyrights, no download or viewing links will be provided.</p>",10

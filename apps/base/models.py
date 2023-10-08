@@ -38,7 +38,7 @@ class Menu(BaseModel):
     nombre = models.CharField(max_length=80, unique=True,db_index=True)
     descripcion = models.TextField(blank=True, null=True)
     url = models.CharField(max_length=80, unique=True,db_index=True)
-    image = models.ImageField(upload_to='icons/', max_length=255)
+    image = models.ImageField(upload_to='icons/', max_length=255, default="none.png")
     clasificacion = models.CharField(max_length=16, choices=TIPO, default='LISTAR')
     content = HTMLField(blank=True, null=True)
     orden = models.IntegerField(default = 0)
@@ -64,6 +64,7 @@ class Filtro(BaseModel):
     nombre = models.CharField(max_length=80, unique=True,db_index=True)
     descripcion = models.TextField(blank=True, null=True)
     url = models.CharField(max_length=80, unique=True,db_index=True)
+    image = models.ImageField(upload_to='icons/', max_length=255, default="none.png")
     localStorageKey = models.CharField(max_length=80, unique=True,db_index=True)
     clasificacion = models.CharField(max_length=16, choices=TIPO, default='LISTAR')
     
@@ -80,7 +81,7 @@ class EndBar(BaseModel):
     nombre = models.CharField(max_length=80, unique=True,db_index=True)
     descripcion = models.TextField(blank=True, null=True)
     url = models.CharField(max_length=80, unique=True,db_index=True)
-    image = models.ImageField(upload_to='endbar/', max_length=255)
+    image = models.ImageField(upload_to='endbar/', max_length=255, default="none.png")
     orden = models.IntegerField(default = 0)
 
     class Meta:
