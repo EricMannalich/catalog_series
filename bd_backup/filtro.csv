@@ -1,7 +1,7 @@
 ﻿modifieddate,nombre,descripcion,url,image,localStorageKey,clasificacion
-2023-10-08,Color,,color/,icons/paint_palette_32px.png,color_carta,LISTAR
+2023-10-08,Color,Select the colors of the cards to be searched. The color of the cards depends on the number of episodes.,color/,icons/paint_palette_32px.png,color_carta,LISTAR
 2023-10-08,Date,,checkedTimeInicio,icons/calendar_32px.png,checkedTimeFin,FECHA
-2023-10-08,Genre,,genero/,icons/todo_list_26px.png,genero,LISTAR
-2023-10-08,Order,,colorFormatListNumberedIcon,icons/alphabetical_sorting_50px.png,orden,ORDENAR
-2023-10-08,Score,,colorStarIco,icons/star_filled_50px.png,valueRating,PUNTUACION
-2023-10-08,Transmission,,colorCellTowerIcon,icons/radio_tower_26px.png,tansmicion,TRANSMISION
+2023-10-08,Genre,Select the genres that the series should have. Only series with all genres checked will appear.,genero/,icons/todo_list_26px.png,genero,LISTAR
+2023-10-08,Order,Select the order in which you want the data to be displayed.,colorFormatListNumberedIcon,icons/alphabetical_sorting_50px.png,orden,ORDENAR
+2023-10-08,Score,Allows you to search for series with a specific rating.,colorStarIco,icons/star_filled_50px.png,valueRating,PUNTUACION
+2023-10-08,Transmission,Select if you want to display only the series in transmission or the finished ones.,colorCellTowerIcon,icons/radio_tower_26px.png,tansmicion,TRANSMISION
