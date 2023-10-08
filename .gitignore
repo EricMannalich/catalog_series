@@ -15,6 +15,7 @@
 #**/bd_backup/**
 **/static_files/**
 **/media_files/**
+**/migrations/**
 ./static
 
 **/**.env
