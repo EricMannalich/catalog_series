@@ -38,7 +38,7 @@ def importMenu():
             un_obj = Model.objects.filter(nombre = nombre).first()
             if un_obj:
                 old_date = un_obj.modified_date
-                if new_date:# > old_date:
+                if new_date > old_date:
                     un_obj.nombre = nombre
                     un_obj.descripcion = descripcion
                     un_obj.url = url
@@ -70,7 +70,7 @@ def importFiltro():
             un_obj = Model.objects.filter(nombre = nombre).first()
             if un_obj:
                 old_date = un_obj.modified_date
-                if new_date:# > old_date:
+                if new_date > old_date:
                     un_obj.nombre = nombre
                     un_obj.descripcion = descripcion
                     un_obj.url = url
