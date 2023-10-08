@@ -202,6 +202,7 @@ sudo apt policy postgresql
 sudo curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 sudo apt update
+sudo apt upgrade
 sudo apt install python3.11 python3-pip python3-venv python3-dev libpq-dev postgresql postgresql-contrib nginx
 ```
 
@@ -210,10 +211,14 @@ sudo apt install python3.11 python3-pip python3-venv python3-dev libpq-dev postg
 ```bash
 git clone https://github.com/EricMannalich/catalog_series.git
 cd ~/catalog_series
-sudo python3 -m venv env
-source env/bin/activate
--H pip3 install --upgrade pip
-pip3 install -r requirements.txt
+#sudo python3 -m venv env
+#source env/bin/activate
+sudo -H pip3 install --upgrade pip
+sudo pip3 install -r requirements.txt
+
+
+sudo touch .env
+sudo nano .env
 ```
 3. They must create an `.env` file with the application credentials:
 
@@ -232,8 +237,8 @@ CORS_ALLOWED_ORIGINS_REGEXE = ""
 IS_STATIC_SERVER = "0"
 
 # Postgres
-POSTGRES_CLIENT_BD = "Media"
-POSTGRES_CLIENT_USER = "mediacard"
+POSTGRES_CLIENT_BD = "mediacard"
+POSTGRES_CLIENT_USER = "postgres"
 POSTGRES_CLIENT_PASSWORD = "postgres"
 
 # Google
@@ -245,13 +250,8 @@ GOOGLE_CLIENT_SECRET = "your app secret goes here"
 
 ```bash
 sudo -u postgres psql
-CREATE DATABASE Media;
-#ALTER USER postgres WITH PASSWORD 'postgres';
-CREATE USER mediacard WITH PASSWORD 'postgres';
-ALTER ROLE mediacard SET client_encoding TO 'utf8';
-ALTER ROLE mediacard SET default_transaction_isolation TO 'read committed';
-ALTER ROLE mediacard SET timezone TO 'UTC';
-GRANT ALL PRIVILEGES ON DATABASE Media TO mediacard;
+CREATE DATABASE mediacard;
+ALTER USER postgres WITH PASSWORD 'postgres';
 \q
 
 sudo python3 manage.py makemigrations #Prepare DB changes
@@ -285,9 +285,6 @@ sudo nano /etc/systemd/system/gunicorn.service
 ```
 8. Start with the `[Unit]` section, which is used to specify metadata and dependencies. Put a description of the service here and tell the init system to only start this after the networking target has been reached. Because your service relies on the socket from the socket file, you need to include a Requires directive to indicate that relationship.
 
-Next, you’ll open up the `[Service]` section. Specify the user and group that you want to process to run under. You will give your regular user account ownership of the process since it owns all of the relevant files. You’ll give group ownership to the www-data group so that Nginx can communicate easily with Gunicorn.
-
-Finally, you’ll add an `[Install]` section. This will tell systemd what to link this service to if you enable it to start at boot. You want this service to start when the regular multi-user system is up and running.
 
 ```bash
 [Unit]

@@ -17,8 +17,10 @@ bind = MY_URL_PUERTO
 backlog = 2048
 workers = multiprocessing.cpu_count() * 2 + 1
 loglevel = 'info'
-errorlog = 'errorlog'
-accesslog = 'accesslog'
+accesslog = errorlog = "/var/log/gunicorn/dev.log"
+pidfile = "/var/run/gunicorn/dev.pid"
+daemon = True
+capture_output = True
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 wsgi_app = name + ".wsgi"
 chdir = PROYECT_NAME
