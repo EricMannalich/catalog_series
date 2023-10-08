@@ -63,6 +63,7 @@ def importFiltro():
                 continue
             descripcion = row['descripcion'].strip()
             url = row['url'].strip()
+            image = row['image'].strip()
             localStorageKey = row['localStorageKey'].strip()
             clasificacion = row['clasificacion'].strip()
             new_date = datetime.date(datetime.strptime(modified_date, "%Y-%m-%d"))
@@ -73,11 +74,12 @@ def importFiltro():
                     un_obj.nombre = nombre
                     un_obj.descripcion = descripcion
                     un_obj.url = url
+                    un_obj.image = image
                     un_obj.localStorageKey = localStorageKey
                     un_obj.clasificacion = clasificacion
                     un_obj.save()
             else:
-                insert = Model(nombre = nombre,descripcion = descripcion,url = url,localStorageKey = localStorageKey,clasificacion = clasificacion)
+                insert = Model(nombre = nombre,descripcion = descripcion,url = url,image = image,localStorageKey = localStorageKey,clasificacion = clasificacion)
                 insert.save()
         return True
 
@@ -251,6 +253,7 @@ def exportFiltro():
         'nombre',
         'descripcion',
         'url',
+        'image',
         'localStorageKey',
         'clasificacion').order_by('nombre')
     if all_obj:

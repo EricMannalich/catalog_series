@@ -215,7 +215,7 @@ python -m venv env
 source env/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
-deactivate 
+
 
 sudo touch .env
 sudo nano .env
@@ -237,7 +237,7 @@ CORS_ALLOWED_ORIGINS_REGEXE = ""
 IS_STATIC_SERVER = "0"
 
 # Postgres
-POSTGRES_CLIENT_BD = "mediacard"
+POSTGRES_CLIENT_BD = "media"
 POSTGRES_CLIENT_USER = "postgres"
 POSTGRES_CLIENT_PASSWORD = "postgres"
 
@@ -258,6 +258,7 @@ python manage.py collectstatic --noinput
 python manage.py makemigrations #Prepare DB changes
 python manage.py migrate        #Performs DB changes
 python manage.py serie --import #Import the DB with the files in the bd_backup folder.
+deactivate 
 ```
 
 5. Creating systemd Socket and Service Files for Gunicorn:
