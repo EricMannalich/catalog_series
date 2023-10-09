@@ -32,16 +32,10 @@ SIMPLE_JWT = {
 }
 
  # URL you add to google developers console as allowed to make redirection
-WHITE_LIST = [
-    'http://127.0.0.1:3000', 
-    'http://localhost:3000', 
-    'http://127.0.0.1:8000', 
-    'http://localhost:8000', 
-    'http://127.0.0.1', 
-    'http://localhost', 
-    'https://127.0.0.1', 
-    'https://localhost', 
-    ]
+WHITE_LIST = []
+WHITE_LIST_ENV = config('WHITE_LIST', default='localhost')
+if WHITE_LIST_ENV:
+    WHITE_LIST.extend(WHITE_LIST_ENV.split(','))
 
 DJOSER = {
     "LOGIN_FIELD": "email", # Field we use to login on extended User model

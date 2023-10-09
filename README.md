@@ -227,12 +227,12 @@ sudo nano .env
 DJANGO_SECRET_KEY = "<your app key goes here>"
 PROYECT_NAME = "core"
 DEBUG = "0"
-ALLOWED_HOSTS = "localhost"
-CSRF_TRUSTED_ORIGINS = "https://localhost"
+ALLOWED_HOSTS = ".ejemplo.com"
+CSRF_TRUSTED_ORIGINS = "https://ejemplo.com"
 SECURE_HSTS_SECONDS = "31536000"
-SECURE_SSL_HOST = "https://localhost"
-CORS_ALLOWED_ORIGINS = "http://localhost"
-CORS_ORIGIN_WHITELIST = "http://localhost"
+SECURE_SSL_HOST = "https://ejemplo.com"
+CORS_ALLOWED_ORIGINS = "http://ejemplo.com"
+CORS_ORIGIN_WHITELIST = "http://ejemplo.com"
 CORS_ALLOWED_ORIGINS_REGEXE = ""
 IS_STATIC_SERVER = "0"
 
@@ -326,17 +326,23 @@ sudo nano /etc/nginx/sites-available/catalog_series
 server {
     listen 80;
     listen 443;
-    server_name localhost;#IP publica del servidor
+    server_name .ejemplo.com;#IP publica del servidor
 
     location = /favicon.ico { access_log off; log_not_found off; }
     
     location /static/ {
         autoindex on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        gzip_static on;
         alias /home/ubuntu/catalog_series/static/;
     }
 
     location /media/ {
         autoindex on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        gzip_static on;
         alias /home/ubuntu/catalog_series/media/;
     }
 
@@ -371,7 +377,7 @@ sudo nano /etc/nginx/sites-available/catalog_series
     
 server {
     listen 80;
-    server_name localhost;
+    server_name .ejemplo.com;
 
 
     location / {
@@ -381,13 +387,14 @@ server {
 
 
 server {
-    listen 443 default ssl;
-    server_name localhost;
-    ssl_certificate /etc/letsencrypt/live/<DNS_PAGE>/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/<DNS_PAGE>/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    server_name .ejemplo.com;
+    listen 443 default ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/ejemplo.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/ejemplo.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
     ssl_protocols TLSv1.2 TLSv1.3;
+    
     ssl_prefer_server_ciphers on;
     ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
     ssl_ecdh_curve secp384r1;
@@ -395,6 +402,7 @@ server {
     ssl_session_tickets off;
     ssl_stapling on;
     ssl_stapling_verify on;
+    
     resolver 1.1.1.1 8.8.8.8 8.8.4.4 valid=300s;
     resolver_timeout 5s;
     add_header Strict-Transport-Security "max-age=63072000; includeSubdomains";
@@ -402,15 +410,21 @@ server {
     add_header X-Content-Type-Options nosniff;
     client_max_body_size 1M;
 
-     location = /favicon.ico { access_log off; log_not_found off; }
+    location = /favicon.ico { access_log off; log_not_found off; }
 
     location /static/ {
         autoindex on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        gzip_static on;
         alias /home/ubuntu/catalog_series/static/;
     }
 
     location /media/ {
         autoindex on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        gzip_static on;
         alias /home/ubuntu/catalog_series/media/;
     }
 
