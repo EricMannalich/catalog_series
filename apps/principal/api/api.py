@@ -31,7 +31,7 @@ class SerieViewSet(GeneralViewSet):
             model = paginacion(model, pagina, cant_pagina)
             data = self.get_data(model)
             return Response({'count':count, 'results': data}, status = status.HTTP_200_OK)
-        return Response({'error': 'No encontrado!'}, status = status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)
     
 
 class EpisodioViewSet(GeneralViewSet):
@@ -66,7 +66,7 @@ class PuntuacionViewSet(GeneralViewSet):
             usuario = request.user.id
             if not usuario:
                 #usuario = serializer.data.get('usuario')
-                return Response({'error': 'Este usuario no puede cambiar la puntuacion'}, status=status.HTTP_401_UNAUTHORIZED)
+                return Response({'error': 'This user cannot change the score'}, status=status.HTTP_401_UNAUTHORIZED)
             serie = serializer.data.get('serie')
             puntuacion = serializer.data.get('puntuacion')
             print(usuario,serie, puntuacion)
@@ -75,4 +75,4 @@ class PuntuacionViewSet(GeneralViewSet):
             model = self.data_url(request)
             data = self.get_data(model)
             return Response(data, status = status.HTTP_200_OK)
-        return Response({'error': 'Datos no validos!'}, status = status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Invalid data!'}, status = status.HTTP_400_BAD_REQUEST)

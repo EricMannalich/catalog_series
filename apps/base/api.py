@@ -79,10 +79,6 @@ def get_filter_serie(self, request):
             list_genero = genero.split(",")
             for genero in list_genero:
                 model = model.filter(genero = genero)
-            #del list_genero[0]
-            #if list_genero:
-                #model = model.filter(genero__in = list_genero).distinct()
-                #model = model.filter(genero__contains = list_genero).distinct()
 
         tansmicion = request.GET.get('tansmicion')
         if tansmicion:
@@ -126,14 +122,6 @@ def get_filter_serie(self, request):
                 model = model.order_by('-promedio_puntuaciones')
     return model
 
-"""def get_filter_generic(self, request):
-    model = self.get_queryset()
-    filtros = request.GET.get('filtros')
-    if filtros:
-        if filtros == "true":
-            model = get_fecha(model, request)
-    return model"""
-
 class ReadOnly(BasePermission):
     def has_permission(self, request, view):
         return request.method in SAFE_METHODS
@@ -153,8 +141,8 @@ class GeneralViewSet(viewsets.ModelViewSet):
         if model:
             model.state = False
             model.save()
-            return Response({'message': 'Eliminado correctamente!'}, status = status.HTTP_200_OK)
-        return Response({'error': 'No encontrado!'}, status = status.HTTP_400_BAD_REQUEST)
+            return Response({'message': 'Correctly eliminated!'}, status = status.HTTP_200_OK)
+        return Response({'error': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)
 
 class MenuViewSet(GeneralViewSet):
     serializer_class = MenuSerializer

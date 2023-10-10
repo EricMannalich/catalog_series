@@ -28,16 +28,16 @@ class UserViewSet(viewsets.GenericViewSet):
             user = user_serializer.save()
             if user:
                 json = user_serializer.data
-                json['message'] = 'Usuario creado correctamente!'
+                json['message'] = 'User successfully created!'
                 return Response(json,status = status.HTTP_201_CREATED)
-        return Response({'message':'No se ha podido crear el usuario!', 'error':user_serializer.errors},status = status.HTTP_400_BAD_REQUEST)
+        return Response({'message':'User could not be created!', 'error':user_serializer.errors},status = status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk = None):
         user = self.get_object(pk)
         if user:
             user_serializer = self.serializer_class(user)
             return Response(user_serializer.data, status = status.HTTP_200_OK)
-        return Response({'message':'No se ha encontrado un usuario con estos datos'},status = status.HTTP_400_BAD_REQUEST)
+        return Response({'message':'A user with this data has not been found'},status = status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk = None):
         user = self.get_object(pk)
@@ -47,13 +47,13 @@ class UserViewSet(viewsets.GenericViewSet):
                 user_serializer.save()
                 return Response(user_serializer.data,status = status.HTTP_200_OK)
             return Response(user_serializer.errors,status = status.HTTP_400_BAD_REQUEST)
-        return Response({'message':'No se ha encontrado un usuario con estos datos'},status = status.HTTP_400_BAD_REQUEST)
+        return Response({'message':'A user with this data has not been found'},status = status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk = None):
         user = self.get_object(pk)
         if user:
             user_destroy = user.update(is_active = False)
             if user_destroy == 1:
-                return Response({'message':'Usuario Eliminado correctamente!'},status = status.HTTP_200_OK)
-            return Response({'message':'No se ha podido eliminar el usuario'},status = status.HTTP_400_BAD_REQUEST)
-        return Response({'message':'No se ha encontrado un usuario con estos datos'},status = status.HTTP_400_BAD_REQUEST)
+                return Response({'message':'User successfully deleted!'},status = status.HTTP_200_OK)
+            return Response({'message':'The user could not be deleted'},status = status.HTTP_400_BAD_REQUEST)
+        return Response({'message':'A user with this data has not been found'},status = status.HTTP_400_BAD_REQUEST)
