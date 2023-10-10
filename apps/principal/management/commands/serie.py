@@ -207,25 +207,25 @@ def importSerie():
             cantidad_episodios = int(row['cantidadepisodios'].strip())
             link_imdb = row['linkimdb'].strip()
             promedio_puntuaciones_imdb = float(row['promedio_puntuaciones_imdb'].strip())
-            new_date = datetime.date(datetime.strptime(modified_date, "%Y-%m-%d"))
+            #new_date = datetime.date(datetime.strptime(modified_date, "%Y-%m-%d"))
             un_obj = Model.objects.filter(nombre = nombre).first()
             if un_obj:
                 is_genero = Model.objects.filter(nombre = nombre, genero = genero).first()
                 if not is_genero:
                     un_obj.genero.add(genero)
-                old_date = un_obj.modified_date
-                if new_date > old_date:
-                    un_obj.nombre = nombre
-                    un_obj.sinopsis = sinopsis
-                    un_obj.emision = emision
-                    un_obj.image = image
-                    un_obj.fecha_salida = fecha_salida
-                    un_obj.categoria = categoria
-                    un_obj.cantidad_episodios = cantidad_episodios
-                    un_obj.link_imdb = link_imdb
-                    un_obj.promedio_puntuaciones_imdb = promedio_puntuaciones_imdb
-                    un_obj.save()
-                    #print("update serie " + nombre + " con genero " + genero_str )
+                """old_date = un_obj.modified_date
+                if new_date > old_date:"""
+                un_obj.nombre = nombre
+                un_obj.sinopsis = sinopsis
+                un_obj.emision = emision
+                un_obj.image = image
+                un_obj.fecha_salida = fecha_salida
+                un_obj.categoria = categoria
+                un_obj.cantidad_episodios = cantidad_episodios
+                un_obj.link_imdb = link_imdb
+                un_obj.promedio_puntuaciones_imdb = promedio_puntuaciones_imdb
+                un_obj.save()
+                #print("update serie " + nombre + " con genero " + genero_str )
             else:
                 insert = Model(nombre = nombre,sinopsis = sinopsis,emision = emision,image = image,fecha_salida = fecha_salida,categoria = categoria,cantidad_episodios = cantidad_episodios,link_imdb = link_imdb,promedio_puntuaciones_imdb = promedio_puntuaciones_imdb)
                 insert.save()
