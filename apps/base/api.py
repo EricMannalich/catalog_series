@@ -4,7 +4,6 @@ from django.contrib.postgres.search import SearchQuery, SearchVector
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, SAFE_METHODS
-from rest_framework_simplejwt.tokens import AccessToken
 
 from apps.base.serializers import *
 
@@ -92,7 +91,7 @@ def get_filter_serie(self, request):
             if puntuacion.isdigit():
                 int_puntuacion = int(puntuacion)
                 if int_puntuacion > 0:
-                    new_model = model.filter(promedio_puntuaciones = int_puntuacion)
+                    new_model = model.filter(promedio_puntuaciones__gte = int_puntuacion)
                     if new_model:
                         model = new_model
 
@@ -137,12 +136,13 @@ class GeneralViewSet(viewsets.ModelViewSet):
         return self.get_serializer().Meta.model.objects.filter(state = True)
 
     def destroy(self,request,pk=None):
-        model = self.serializer_class().Meta.model.objects.filter(id = pk).first()
-        if model:
-            model.state = False
-            model.save()
-            return Response({'message': 'Correctly eliminated!'}, status = status.HTTP_200_OK)
-        return Response({'error': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)
+        if (request.user.is_staff):
+            model = self.serializer_class().Meta.model.objects.filter(id = pk).first()
+            if model:
+                model.state = False
+                model.save()
+                return Response({'message': 'Correctly eliminated!'}, status = status.HTTP_200_OK)
+        return Response({'message': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)
 
 class MenuViewSet(GeneralViewSet):
     serializer_class = MenuSerializer

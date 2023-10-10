@@ -31,6 +31,7 @@ def importMenu():
             descripcion = row['descripcion'].strip()
             url = row['url'].strip()
             image = row['image'].strip()
+            image_body = row['image_body'].strip()
             clasificacion = row['clasificacion'].strip()
             content = row['content'].strip()
             orden = row['orden'].strip()
@@ -43,12 +44,13 @@ def importMenu():
                     un_obj.descripcion = descripcion
                     un_obj.url = url
                     un_obj.image = image
+                    un_obj.image_body = image_body
                     un_obj.clasificacion = clasificacion
                     un_obj.content = content
                     un_obj.orden = orden
                     un_obj.save()
             else:
-                insert = Model(nombre = nombre,descripcion = descripcion,url = url,image = image,clasificacion = clasificacion,content = content,orden = orden)
+                insert = Model(nombre = nombre,descripcion = descripcion,url = url,image = image,image_body = image_body,clasificacion = clasificacion,content = content,orden = orden)
                 insert.save()
         return True
     
@@ -238,6 +240,7 @@ def exportMenu():
         'descripcion',
         'url',
         'image',
+        'image_body',
         'clasificacion',
         'content',
         'orden').order_by('orden')

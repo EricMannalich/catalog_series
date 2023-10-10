@@ -50,10 +50,12 @@ class UserViewSet(viewsets.GenericViewSet):
         return Response({'message':'A user with this data has not been found'},status = status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk = None):
-        user = self.get_object(pk)
-        if user:
-            user_destroy = user.update(is_active = False)
-            if user_destroy == 1:
-                return Response({'message':'User successfully deleted!'},status = status.HTTP_200_OK)
-            return Response({'message':'The user could not be deleted'},status = status.HTTP_400_BAD_REQUEST)
-        return Response({'message':'A user with this data has not been found'},status = status.HTTP_400_BAD_REQUEST)
+        if (request.user.is_staff):
+            user = self.get_object(pk)
+            if user:
+                user_destroy = user.update(is_active = False)
+                if user_destroy == 1:
+                    return Response({'message':'User successfully deleted!'},status = status.HTTP_200_OK)
+                return Response({'message':'The user could not be deleted'},status = status.HTTP_400_BAD_REQUEST)
+            return Response({'message':'A user with this data has not been found'},status = status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)

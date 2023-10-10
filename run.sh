@@ -2,6 +2,7 @@
 cd /home/ubuntu/catalog_series/
 git pull
 source env/bin/activate
+python manage.py makemigrations
 python manage.py migrate --noinput
 python manage.py serie --import
 python manage.py collectstatic --noinput

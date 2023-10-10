@@ -39,6 +39,7 @@ class Menu(BaseModel):
     descripcion = models.TextField(blank=True, null=True)
     url = models.CharField(max_length=80, unique=True,db_index=True)
     image = models.ImageField(upload_to='icons/', max_length=255, default="none.png")
+    image_body = models.ImageField("image_body",upload_to='body/', max_length=255, default="none.png")
     clasificacion = models.CharField(max_length=16, choices=TIPO, default='LISTAR')
     content = HTMLField(blank=True, null=True)
     orden = models.IntegerField(default = 0)

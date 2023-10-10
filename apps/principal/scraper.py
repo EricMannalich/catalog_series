@@ -21,7 +21,8 @@ def update_imdb():
 
             item_sinopsis = soup.find("span", attrs={"class": "sc-466bb6c-2 eVLpWt"})
             if item_sinopsis :
-                serie.sinopsis = item_sinopsis.get_text()
+                if len(item_sinopsis > 50):
+                    serie.sinopsis = item_sinopsis.get_text()
             serie.save()
-            print(serie)
+            print({"Name":serie.nombre, "Score":item_puntuacion})
 
