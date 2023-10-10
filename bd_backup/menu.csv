@@ -1,6 +1,6 @@
 ﻿modifieddate,nombre,descripcion,url,image,image_body,clasificacion,content,orden
 2023-10-05,Catalog,,serie,icons/revista.png,none.png,LISTAR,,1
-2023-10-10,About,,about,icons/high_importance_32px.png,body/animecardsdiagram.png,INFO,"<p style=""text-align: justify;"">The project, entitled information relevant to the anime series broadcasted since 1990 in a single database, accessible as a web page and in open mode, the information relevant to the anime series broadcasted since 1990. The strong point of the website lies in the filtering and search options for series.</p>
+2023-10-10,About,,about,icons/high_importance_32px.png,body/animecardsdiagram.png,INFO,"<p style=""text-align: justify;"">The project, entitled information relevant to the anime series broadcasted since 1990 in a single database, accessible as a web page and in open mode. The strong point of the website lies in the filtering and search options for series.</p>
 <p style=""text-align: justify;"">The project is a non-profit research tool with the objective of learning about web programming. The site's code will be available for download on GitHub. In order not to infringe copyrights, no download or viewing links will be provided. A lot of information was taken from www.imdb.com, that's why each series has a link to that website.</p>
 <ul>
 <li><strong>Link to GitHub:</strong> <a href=""https://github.com/EricMannalich/catalog_series""><span style=""background-color: #fbeeb8;"">https://github.com/EricMannalich/catalog_series</span></a></li>
