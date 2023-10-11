@@ -91,7 +91,7 @@ def get_filter_serie(self, request):
             if puntuacion.isdigit():
                 int_puntuacion = int(puntuacion)
                 if int_puntuacion > 0:
-                    new_model = model.filter(promedio_puntuaciones__gte = int_puntuacion)
+                    new_model = model.filter(promedio_puntuaciones__gte = int_puntuacion - 1)
                     if new_model:
                         model = new_model
 
