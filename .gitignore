@@ -16,6 +16,7 @@
 **/static_files/**
 **/media_files/**
 **/migrations/**
+**/perfil/**
 ./static
 
 **/**.env
