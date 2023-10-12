@@ -1,21 +1,22 @@
-from django.db import models, transaction
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from apps.base.models import BaseModel
 from apps.users.models import User
 
 # Create your models here.
 PUNTUACION = (
-        ('0', 'Ninguno'),
-        ('1', 'Pesima'),
-        ('2', 'Muy Baja'),
-        ('3', 'Baja'),
-        ('4', 'Bajo la Media'),
-        ('5', 'Media'),
-        ('6', 'Encima de la Media'),
-        ('7', 'Alta'),
-        ('8', 'Muy Alta'),
-        ('9', 'Exelente'),
-        ('10', 'Excepcional')
+        ('0', _('Null')),
+        ('1', _('Terrible')),
+        ('2', _('Very Low')),
+        ('3', _('Low')),
+        ('4', _('Below Average')),
+        ('5', _('Average')),
+        ('6', _('Above Average')),
+        ('7', _('High')),
+        ('8', _('Very High')),
+        ('9', _('Excellent')),
+        ('10', _('Exceptional')),
         )
 
 class Genero(BaseModel):
@@ -23,8 +24,8 @@ class Genero(BaseModel):
     descripcion = models.TextField(blank=True, null=True)
     
     class Meta:
-        verbose_name = 'Género'
-        verbose_name_plural = 'Géneros'
+        verbose_name = _('Genre')
+        verbose_name_plural = _('Genres')
         ordering = ('nombre',)
 
     def __str__(self):
@@ -34,8 +35,8 @@ class Categoria(BaseModel):
     nombre = models.CharField(max_length=25, unique=True)
     
     class Meta:
-        verbose_name = 'Categoría'
-        verbose_name_plural = 'Categorías'
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
         ordering = ('nombre',)
 
     def __str__(self):
@@ -47,8 +48,8 @@ class Color(BaseModel):
     image = models.ImageField(upload_to='cards/', max_length=255)
     
     class Meta:
-        verbose_name = 'Color'
-        verbose_name_plural = 'Colores'
+        verbose_name = _('Color')
+        verbose_name_plural = _('Colors')
         ordering = ('descripcion',)
 
     def __str__(self):
@@ -69,8 +70,8 @@ class Serie(BaseModel):
     promedio_puntuaciones_imdb = models.DecimalField("promedio_puntuaciones_imdb",max_digits=3, decimal_places=1, default = 0)
 
     class Meta:
-        verbose_name = 'Serie'
-        verbose_name_plural = 'Series'
+        verbose_name = _('Series')
+        verbose_name_plural = _('Series')
         ordering = ('nombre',)
 
     def __str__(self):
@@ -128,8 +129,8 @@ class Episodio(BaseModel):
     link = models.URLField(blank=True, null=True)
     
     class Meta:
-        verbose_name = 'Episodio'
-        verbose_name_plural = 'Episodios'
+        verbose_name = _('Episode')
+        verbose_name_plural = _('Episodes')
 
     def __str__(self):
         return self.nombre
@@ -140,8 +141,8 @@ class Puntuacion(BaseModel):
     puntuacion = models.CharField(max_length=2, choices=PUNTUACION, default = '0')
 
     class Meta:
-        verbose_name = 'Puntuación'
-        verbose_name_plural = 'Puntuaciones'
+        verbose_name = _('Score')
+        verbose_name_plural = _('Scores')
 
     def __str__(self):
         return '%s %s %s' % (self.usuario, self.serie, self.puntuacion)

@@ -32,10 +32,10 @@ class UserManager(BaseUserManager):
         return self._create_user(username, email, first_name,last_name, password, True, True, **extra_fields)
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length = 255, unique = True)
+    username = models.CharField(_('user name'),max_length = 255, unique = True)
     email = models.EmailField(_('email address'),max_length = 255, unique = True,)
-    first_name = models.CharField(max_length = 255, blank = True, null = True)
-    last_name = models.CharField(max_length = 255, blank = True, null = True)
+    first_name = models.CharField(_('first name'),max_length = 255, blank = True, null = True)
+    last_name = models.CharField(_('last name'),max_length = 255, blank = True, null = True)
     image = models.ImageField(upload_to=user_directory_path, max_length=255, null=True, blank = True)
     is_active = models.BooleanField(default = True)
     is_staff = models.BooleanField(default = False)
@@ -43,8 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     class Meta:
-        verbose_name = 'Usuario'
-        verbose_name_plural = 'Usuarios'
+        verbose_name = _('User')
+        verbose_name_plural = _('Users')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name','last_name']

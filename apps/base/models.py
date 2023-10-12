@@ -1,7 +1,7 @@
 from django.db import models
 from simple_history.models import HistoricalRecords
 from tinymce.models import HTMLField
-
+from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class BaseModel(models.Model):
@@ -24,16 +24,15 @@ class BaseModel(models.Model):
         self.changed_by = value
 
     class Meta:
-        """Meta definition for BaseModel."""
         abstract = True
-        verbose_name = 'Modelo Base'
-        verbose_name_plural = 'Modelos Base'
+        verbose_name = _('Base Model')
+        verbose_name_plural = _('Base Models')
 
 class Menu(BaseModel):
     TIPO = (
-        ('LISTAR', 'Listar'),
-        ('INFO', 'Información'),
-        ('USER', 'Administracion')
+        ('LISTAR', _('List')),
+        ('INFO', _('Information')),
+        ('USER', _('Administration'))
     )
     nombre = models.CharField(max_length=80, unique=True,db_index=True)
     descripcion = models.TextField(blank=True, null=True)
@@ -45,8 +44,8 @@ class Menu(BaseModel):
     orden = models.IntegerField(default = 0)
 
     class Meta:
-        verbose_name = 'Menu'
-        verbose_name_plural = 'Menuses'
+        verbose_name = _('Menu')
+        verbose_name_plural = _('Menus')
         #ordering = ('orden',)
 
     def __str__(self):
@@ -54,12 +53,12 @@ class Menu(BaseModel):
 
 class Filtro(BaseModel):
     TIPO = (
-        ('LISTAR', 'Listar'),
-        ('ORDENAR', 'Ordenar'),
-        ('TRANSMISION', 'Transmision'),
-        ('AUTOCOMPLETAR', 'Autocompletar'),
-        ('FECHA', 'Fecha'),
-        ('PUNTUACION', 'Puntuacion')
+        ('LISTAR', _('List')),
+        ('ORDENAR', _('Order')),
+        ('TRANSMISION', _('Transmission')),
+        ('AUTOCOMPLETAR', _('Autocomplete')),
+        ('FECHA', _('Date')),
+        ('PUNTUACION', _('PuntuacionScore'))
     )
     
     nombre = models.CharField(max_length=80, unique=True,db_index=True)
@@ -71,8 +70,8 @@ class Filtro(BaseModel):
     
 
     class Meta:
-        verbose_name = 'Filtro'
-        verbose_name_plural = 'Filtros'
+        verbose_name = _('Filter')
+        verbose_name_plural = _('Filters')
         ordering = ('nombre',)
 
     def __str__(self):
@@ -86,8 +85,8 @@ class EndBar(BaseModel):
     orden = models.IntegerField(default = 0)
 
     class Meta:
-        verbose_name = 'Tecnologia'
-        verbose_name_plural = 'Tecnologias'
+        verbose_name = _('Technology')
+        verbose_name_plural = _('Technologies')
         ordering = ('orden',)
 
     def __str__(self):
