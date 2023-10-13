@@ -280,13 +280,13 @@ ListenStream=/run/gunicorn.sock
 WantedBy=sockets.target
 ```
 
-7. Next, 
+7. Modify the `gunicorn.service` file. Access with the following command:
 
 ```bash
 sudo nano /etc/systemd/system/gunicorn.service
 ```
-8. Start 
 
+Add the following configuration and save:
 
 ```bash
 [Unit]
@@ -307,26 +307,27 @@ ExecStart=/home/ubuntu/catalog_series/env/bin/gunicorn \
 [Install]
 WantedBy=multi-user.target
 ```
-9. You can now start and enable the Gunicorn socket. This will create the socket file at /run/gunicorn.sock now and at boot. When a connection is made to that socket, systemd will automatically start the gunicorn.service to handle it:
+
+Activate the configuration with the following commands:
 
 ```bash
 sudo systemctl start gunicorn.socket
 sudo systemctl enable gunicorn.socket
 ```
 
-10. Creating and opening a new server block in Nginx’s sites-available directory:
+8. Creating and opening a new server block in Nginx’s sites-available directory:
 
 ```bash
 sudo nano /etc/nginx/sites-available/catalog_series
 ```
 
-11. Inside, open up a new server block. You will start by specifying that this block should listen on the normal port 80 and that it should respond to your server’s domain name or IP address. Next, you will tell Nginx to ignore any problems with finding a favicon. You will also tell it where to find the static assets. Finally, create a location / {} block to match all other requests. Inside of this location, you’ll include the standard proxy_params file included with the Nginx installation and then pass the traffic directly to the Gunicorn socket:
+Add the following configuration and save:
 
 ```bash
 server {
     listen 80;
     listen 443;
-    server_name .ejemplo.com;#IP publica del servidor
+    server_name .ejemplo.com;#Public IP of the server
 
     location = /favicon.ico { access_log off; log_not_found off; }
     
@@ -354,7 +355,7 @@ server {
 }
 ```
 
-12. Save and close the file when you are finished. Now, you can enable the file by linking it to the sites-enabled directory:
+Activate the configuration with the following commands:
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/catalog_series /etc/nginx/sites-enabled
@@ -365,16 +366,22 @@ sudo ufw allow 'Nginx Full'
 sudo service nginx restart
 ```
 
-13. HTTPS
+9. HTTPS:
 ```bash
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo certbot --nginx --rsa-key-size 4096 --no-redirect
 sudo nano /etc/nginx/sites-available/catalog_series
 ```
+10. Creating and opening a new server block in Nginx’s sites-available directory:
+
 ```bash
-...
-    
+sudo nano /etc/nginx/sites-available/catalog_series
+```
+
+Add the following configuration and save:
+
+```bash
 server {
     listen 80;
     server_name .ejemplo.com;
@@ -395,11 +402,8 @@ server {
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
     ssl_protocols TLSv1.2 TLSv1.3;
     
-    ssl_prefer_server_ciphers on;
-    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
     ssl_ecdh_curve secp384r1;
     ssl_session_cache shared:SSL:15m;
-    ssl_session_tickets off;
     ssl_stapling on;
     ssl_stapling_verify on;
     
@@ -432,15 +436,12 @@ server {
         include proxy_params;
         proxy_pass http://unix:/run/gunicorn.sock;
     }
-
 }
-
-...
 ```
+
+Activate the configuration with the following commands:
+
 ```bash
 sudo systemctl restart nginx
+sudo service nginx restart
 ```
-
-
-
-
