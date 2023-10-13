@@ -17,12 +17,22 @@ def update_imdb():
 
             item_puntuacion = soup.find("span", attrs={"class": "sc-bde20123-1 iZlgcd"})
             if item_puntuacion :
-                serie.promedio_puntuaciones_imdb = float(item_puntuacion.get_text())
+                new_puntuacion = float(item_puntuacion.get_text())
+                if new_puntuacion > 0 and new_puntuacion < 10:
+                    serie.promedio_puntuaciones_imdb = new_puntuacion
 
             item_sinopsis = soup.find("span", attrs={"class": "sc-466bb6c-2 eVLpWt"})
             if item_sinopsis :
-                if len(item_sinopsis > 50):
-                    serie.sinopsis = item_sinopsis.get_text()
+                item_sinopsis_text = item_sinopsis.get_text()
+                if len(item_sinopsis_text) > 30:
+                    new_item_sinopsis_text = item_sinopsis_text.replace('Read all', '')
+                    serie.sinopsis = new_item_sinopsis_text
             serie.save()
-            print({"Name":serie.nombre, "Score":item_puntuacion})
+
+            """item_companies = soup.find("li", attrs={"data-testid": "title-details-companies"})
+            companies_list = item_companies.find_all("a", attrs={"class": "ipc-metadata-list-item__list-content-item ipc-metadata-list-item__list-content-item--link"})
+            for company in companies_list:
+                print("a :",company.get_text())"""
+            
+            print({"Name":serie.nombre, "Score":new_puntuacion})
 
