@@ -17,7 +17,7 @@ You can download `Python`: https://www.python.org/downloads
 *  Use admin privileges
 *  Add python.exe to PATH
 *  Customize installation
-*  Todas las "Optional Features"
+*  All the "Optional Features"
 *  Install Python 3.11 for all user
 *  Associate files with Python
 *  Create shortcuts for installed applications
@@ -153,7 +153,7 @@ Answer the questions in the previous command and then execute:
 
 9. Open the `pgAadmin` and create a new server with the following parameters:
 
-*	Name: (cualquiera)
+*	Name: (any)
 *	Host name: 127.0.0.1
 *	Port: 5433
 *	Manintenace database: postgres
@@ -182,7 +182,7 @@ GOOGLE_CLIENT_SECRET = "your app secret goes here"
 ```
 When you enter the site you can log in with Google and a non-administrative user will be created automatically.
 
-## Pasos para ejecutar en modo despliegue online (LINUX):
+## Steps to run in online deployment mode (LINUX):
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-22-04
 
@@ -202,7 +202,6 @@ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)
 sudo apt update
 sudo apt upgrade
 sudo apt install python3.11 python3-pip python3.11-venv python3.11-dev libpq-dev python3.11-distutils python3.11-tk python3.11-gdbm python3.11-lib2to3 postgresql postgresql-contrib nginx
-
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
 ```
 
@@ -215,7 +214,6 @@ python -m venv env
 source env/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
-
 
 sudo touch .env
 sudo nano .env
