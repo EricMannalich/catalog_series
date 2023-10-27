@@ -69,7 +69,7 @@ class PuntuacionViewSet(GeneralViewSet):
                 return Response({'message': 'This user cannot change the score'}, status=status.HTTP_401_UNAUTHORIZED)
             serie = serializer.data.get('serie')
             puntuacion = serializer.data.get('puntuacion')
-            print(usuario,serie, puntuacion)
+            #print(usuario,serie, puntuacion)
             puntuacion_insert = Puntuacion(usuario_id = usuario, serie_id = serie, puntuacion = puntuacion)
             puntuacion_insert.save()
             model = self.data_url(request)
