@@ -91,3 +91,29 @@ class EndBar(BaseModel):
 
     def __str__(self):
         return self.nombre
+    
+class IpAddress(BaseModel):
+    ip = models.CharField(max_length=39, unique=True,db_index=True)
+    continent_code = models.CharField(max_length=2, blank=True, null=True)
+    continent_name = models.CharField(max_length=16, blank=True, null=True)
+    country_code2 = models.CharField(max_length=2, blank=True, null=True)
+    country_code3 = models.CharField(max_length=3, blank=True, null=True)
+    country_name = models.CharField(max_length=64, blank=True, null=True)
+    state_prov = models.CharField(max_length=64, blank=True, null=True)
+    state_code = models.CharField(max_length=16, blank=True, null=True)
+    district = models.CharField(max_length=64, blank=True, null=True)
+    city = models.CharField(max_length=64, blank=True, null=True)
+    zipcode = models.CharField(max_length=5, blank=True, null=True)
+    latitude = models.CharField(max_length=16, blank=True, null=True)
+    longitude = models.CharField(max_length=16, blank=True, null=True)
+    calling_code = models.CharField(max_length=5, blank=True, null=True)
+    country_flag = models.CharField(max_length=64, blank=True, null=True)
+    organization = models.CharField(max_length=64, blank=True, null=True)
+
+    class Meta:
+        verbose_name = _('User Info IP')
+        verbose_name_plural = _('Users Info IP')
+        ordering = ('ip',)
+
+    def __str__(self):
+        return self.ip
