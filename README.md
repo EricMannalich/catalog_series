@@ -234,6 +234,10 @@ CORS_ORIGIN_WHITELIST = "http://ejemplo.com"
 CORS_ALLOWED_ORIGINS_REGEXE = ""
 IS_STATIC_SERVER = "0"
 
+# IP localization
+LOCALIZATION_API_KEY = "<your app key goes here>"
+LOCALIZATION_API_URL = 'https://api.ipgeolocation.io/ipgeo'
+
 # Postgres
 POSTGRES_CLIENT_BD = "media"
 POSTGRES_CLIENT_USER = "postgres"
