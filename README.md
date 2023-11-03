@@ -86,6 +86,10 @@ On Windows you can run `run.bat` to run the server. It only works if the virtual
 # Django
 DJANGO_SECRET_KEY = "<your app key goes here>"
 
+# IP localization
+LOCALIZATION_API_KEY = "<your app key goes here>"
+LOCALIZATION_API_URL = 'https://api.ipgeolocation.io/ipgeo'
+
 # Postgres
 POSTGRES_CLIENT_BD = "Media"
 POSTGRES_CLIENT_USER = "postgres"
@@ -175,6 +179,10 @@ Then add a database:
 ```bash
 # Django
 DJANGO_SECRET_KEY = "<your app key goes here>"
+
+# IP localization
+LOCALIZATION_API_KEY = "<your app key goes here>"
+LOCALIZATION_API_URL = 'https://api.ipgeolocation.io/ipgeo'
 
 # Google
 GOOGLE_CLIENT_KEY = "<your app key goes here>"
