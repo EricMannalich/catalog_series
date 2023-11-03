@@ -7,8 +7,10 @@ class BaseAdmin(admin.ModelAdmin):
     list_display_links = list_display
 
 class IpAddressAdmin(admin.ModelAdmin):
-    list_display = ("ip", "continent_name", "country_name", "state_prov", "city",)
+    list_display = ("ip", "continent_name", "country_name", "state_prov", "city", "organization", "user",)
     list_display_links = list_display
+    list_filter = ("continent_name", "country_name", "state_prov", "city", "organization", "user",)
+    search_fields = ("ip", "continent_name", "country_name", "state_prov", "city", "organization",)
 
 admin.site.register(Menu, BaseAdmin)
 admin.site.register(Filtro, BaseAdmin)

@@ -4,6 +4,7 @@ from decouple import config
 from asgiref.sync import iscoroutinefunction
 from django.utils.decorators import sync_and_async_middleware
 from apps.base.models import IpAddress
+from apps.users.models import User
 
 LOCALIZATION_API_KEY = config('LOCALIZATION_API_KEY', default='')
 LOCALIZATION_API_URL = config('LOCALIZATION_API_URL', default='')
@@ -16,8 +17,17 @@ def get_user_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     if ip:
+        user=None
+        user_id = request.user.id
+        if user_id:
+            user = User.objects.filter(id = user_id).first()
+        
         try:
-            IpAddress.objects.get(ip=ip)
+            old_ip_address = IpAddress.objects.get(ip=ip)
+            if not old_ip_address.user and user:
+                old_ip_address.user=user
+                old_ip_address.save()
+
         except IpAddress.DoesNotExist:
             ip_info_response = requests.get(api_url + "&ip=" + ip)
             #print(api_url + "&ip=" + ip, ip_info_response.status_code)
@@ -39,7 +49,8 @@ def get_user_ip(request):
                                        longitude=ip_info['longitude'],
                                        calling_code=ip_info['calling_code'],
                                        country_flag=ip_info['country_flag'],
-                                       organization=ip_info['organization'])
+                                       organization=ip_info['organization'],
+                                       user=user)
                 ip_address.save()
     return None
 
