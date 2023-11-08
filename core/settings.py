@@ -73,7 +73,6 @@ MIDDLEWARE = SOCIAL_AUTH_MIDDLEWARE + [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
-    'core.middleware.iplocationuser',
     ]
 
 
@@ -104,6 +103,8 @@ if DEBUG:
         'rest_framework.renderers.BrowsableAPIRenderer',
     )
     DEFAULT_PERMISSION_ENV = 'rest_framework.permissions.AllowAny'
+"""else:
+    MIDDLEWARE = MIDDLEWARE + ['core.middleware.iplocationuser',]"""
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

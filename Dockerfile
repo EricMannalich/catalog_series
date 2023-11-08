@@ -10,5 +10,6 @@ COPY . /code/
 #WORKDIR /catalog_series
 
 RUN apt update
+RUN apt upgrade
 RUN pip install --upgrade pip
 RUN python -m pip install -r requirements.txt

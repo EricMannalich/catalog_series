@@ -24,7 +24,7 @@ def get_user_ip(request):
         
         try:
             old_ip_address = IpAddress.objects.get(ip=ip)
-            if not old_ip_address.user and user:
+            if user:
                 old_ip_address.user=user
                 old_ip_address.save()
 

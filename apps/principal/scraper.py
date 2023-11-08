@@ -12,8 +12,11 @@ def update_imdb():
     for serie in series:
         URL = serie.link_imdb
         if URL:
-            page = requests.get(URL, headers=headers)
-            soup = BeautifulSoup(page.content, 'html.parser')
+            try:
+                page = requests.get(URL, headers=headers)
+                soup = BeautifulSoup(page.content, 'html.parser')
+            except:
+                continue
 
             item_puntuacion = soup.find("span", attrs={"class": "sc-bde20123-1 iZlgcd"})
             if item_puntuacion :

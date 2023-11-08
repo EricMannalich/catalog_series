@@ -31,7 +31,7 @@ class SerieAdmin(admin.ModelAdmin):
             'classes' : ('collapse',),
         }),
     )
-    list_display = ("nombre","emision", 'color', "fecha_salida", "promedio_puntuaciones", "categoria", "cantidad_episodios")
+    list_display = ("nombre","emision", 'color', "fecha_salida", "promedio_puntuaciones", "promedio_puntuaciones_imdb","categoria", "cantidad_episodios")
     list_display_links = list_display
     search_fields = ("nombre", "sinopsis",)
     list_filter = ("emision", 'color', "genero",)
