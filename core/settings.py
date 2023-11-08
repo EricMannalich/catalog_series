@@ -103,8 +103,8 @@ if DEBUG:
         'rest_framework.renderers.BrowsableAPIRenderer',
     )
     DEFAULT_PERMISSION_ENV = 'rest_framework.permissions.AllowAny'
-"""else:
-    MIDDLEWARE = MIDDLEWARE + ['core.middleware.iplocationuser',]"""
+else:
+    MIDDLEWARE = MIDDLEWARE + ['core.middleware.iplocationuser',]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
