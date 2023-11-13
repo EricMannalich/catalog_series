@@ -156,6 +156,7 @@ class EndBarViewSet(GeneralViewSet):
 
 class IpAddressGraphicAPIView(APIView):
     serializer_model = IpAddressSerializer
+    permission_classes = [ReadOnly]
     
     def get(self, request, format=None):
         model = self.serializer_model().Meta.model.objects.filter(state = True).order_by("country_name")
