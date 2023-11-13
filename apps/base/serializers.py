@@ -27,3 +27,9 @@ class EndBarSerializer(serializers.ModelSerializer):
     class Meta:
         model = EndBar
         exclude = ('state', 'created_date', 'modified_date', 'deleted_date',)
+
+class IpAddressSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = IpAddress
+        exclude = ('state', 'created_date', 'modified_date', 'deleted_date',)

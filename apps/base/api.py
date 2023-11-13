@@ -4,6 +4,7 @@ from django.contrib.postgres.search import SearchQuery, SearchVector
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.views import APIView
 
 from apps.base.serializers import *
 
@@ -152,3 +153,20 @@ class FiltroViewSet(GeneralViewSet):
 
 class EndBarViewSet(GeneralViewSet):
     serializer_class = EndBarSerializer
+
+class IpAddressGraphicAPIView(APIView):
+    serializer_model = IpAddressSerializer
+    
+    def get(self, request, format=None):
+        model = self.serializer_model().Meta.model.objects.filter(state = True).order_by("country_name")
+        old_labels = model.distinct("country_name").values_list("country_name")
+        labels = []
+        new_list_datasets = []
+        for old_label in old_labels:
+            labels.append(old_label[0])
+            new_list_datasets.append(model.filter(country_name = old_label[0]).count())
+        datasets = {"data": new_list_datasets}
+        data = {'labels' : labels, 'datasets' : datasets}
+        if data:
+            return Response(data, status = status.HTTP_200_OK)
+        return Response({'message': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)

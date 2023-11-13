@@ -33,6 +33,7 @@ class Menu(BaseModel):
     TIPO = (
         ('LISTAR', _('List')),
         ('INFO', _('Information')),
+        ('GRAPHIC', _('Graphic')),
         ('USER', _('Administration'))
     )
     nombre = models.CharField(max_length=80, unique=True,db_index=True)
