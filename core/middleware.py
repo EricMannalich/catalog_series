@@ -16,7 +16,7 @@ def get_user_ip(request):
         ip = x_forwarded_for.split(',')[-1].strip()
     else:
         ip = request.META.get('REMOTE_ADDR')
-    if ip:
+    if ip and ip != "127.0.0.1":
         user=None
         user_id = request.user.id
         if user_id:
