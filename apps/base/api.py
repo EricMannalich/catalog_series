@@ -47,8 +47,11 @@ def get_entrada(model, request):
     entrada = request.GET.get('entrada')
     if entrada:
         if entrada != "":
-            #model = model.filter(nombre__icontains = entrada).distinct() | model.filter(sinopsis__icontains = entrada).distinct()
-            model = model.annotate(search=SearchVector('nombre', 'sinopsis')).filter(search=SearchQuery(entrada, search_type='websearch'))
+            if len(entrada) == 1:
+                model = model.filter(nombre__startswith = entrada[0].upper())
+            else:
+                #model = model.filter(nombre__icontains = entrada).distinct() | model.filter(sinopsis__icontains = entrada).distinct()
+                model = model.annotate(search=SearchVector('nombre', 'sinopsis')).filter(search=SearchQuery(entrada, search_type='websearch'))
     return model  
 
 def get_fecha(model, request):

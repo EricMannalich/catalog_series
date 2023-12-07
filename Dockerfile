@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.12
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED=1
@@ -10,6 +10,6 @@ COPY . /code/
 #WORKDIR /catalog_series
 
 RUN apt update
-RUN apt upgrade
+#RUN apt upgrade
 RUN pip install --upgrade pip
 RUN python -m pip install -r requirements.txt

@@ -10,7 +10,7 @@ You can download `Git`: https://git-scm.com/downloads
 git clone https://github.com/EricMannalich/catalog_series.git
 cd catalog_series
 ```
-2. Install `Python 3.11`. Be sure to check the following options:
+2. Install `Python 3.12`. Be sure to check the following options:
 
 You can download `Python`: https://www.python.org/downloads
 
@@ -18,7 +18,7 @@ You can download `Python`: https://www.python.org/downloads
 *  Add python.exe to PATH
 *  Customize installation
 *  All the "Optional Features"
-*  Install Python 3.11 for all user
+*  Install Python 3.12 for all user
 *  Associate files with Python
 *  Create shortcuts for installed applications
 *  Add Python to environment variables
@@ -41,7 +41,7 @@ rundll32.exe sysdm.cpl,EditEnvironmentVariables
 Now in `User variables` select `Path` and add the path where the package was installed, for example:
 
 ```bash
-C:\Users\<nombre_usuario>\AppData\Roaming\Python\Python311\Scripts
+C:\Users\<nombre_usuario>\AppData\Roaming\Python\Python312\Scripts
 ```
 
 The above path depends on the location where Windows installed the package.
@@ -53,7 +53,7 @@ The above path depends on the location where Windows installed the package.
 pip install -r requirements.txt
 ```
 
-5. Install `PostgreSQL 15`. Make sure to set the username and password to match the configuration file in `settings.py`, usually `postgres`.
+5. Install `PostgreSQL 16`. Make sure to set the username and password to match the configuration file in `settings.py`, usually `postgres`.
 
 You can download `PostgreSQL`: https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 
@@ -112,34 +112,26 @@ You can download `DOCKER`: https://www.docker.com/products/docker-desktop
 3. Install the images of `DOCKER`:
 
 ```bash
-docker pull python:3.11
-docker pull postgres:15
+docker pull python:3.12
+docker pull postgres:16
 ```
 
-In case you already have the images saved locally, replace step 3 with step 4.
-
-4. Load the images from `DOCKER` with the following commands:
-
-```bash
-docker load -i media-card-latest.tar
-docker load -i postgres-15.3.tar
-```
-5.  Open `CMD` where the `Dockerfile` file is located and enter the command:
+4.  Open `CMD` where the `Dockerfile` file is located and enter the command:
 
 ```bash
 docker build --force-rm -t media-card:latest .
 ```
 
-6. Install the latest version of `pgAadmin`.
+5. Install the latest version of `pgAadmin`.
 
 You can download `pgAadmin`: https://www.pgadmin.org/download/pgadmin-4-windows
 
-7. Send to create the container (standing where the `docker-compose.yml` file is) with the command:
+6. Send to create the container (standing where the `docker-compose.yml` file is) with the command:
 
 ```bash
   docker-compose up
 ```
-8. In the `Docker` application go to `Containers`, inside `core` select `django-animecard`. 
+7. In the `Docker` application go to `Containers`, inside `core` select `django-animecard`. 
 
 Now you can use the `Files` option to copy the SSL security certificates to the corresponding folders to use the HTTPS secure protocol:
 * '/etc/ssl/certs/selfsigned.crt' * '/etc/ssl/certs/selfsigned.crt'
@@ -155,7 +147,7 @@ Answer the questions in the previous command and then execute:
   openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
 ```
 
-9. Open the `pgAadmin` and create a new server with the following parameters:
+8. Open the `pgAadmin` and create a new server with the following parameters:
 
 *	Name: (any)
 *	Host name: 127.0.0.1
@@ -167,14 +159,14 @@ Answer the questions in the previous command and then execute:
 Then add a database:
 * Database: Media
 
-10. Run the `core` container with the interface buttons. Wait until the icon turns green. 
+9. Run the `core` container with the interface buttons. Wait until the icon turns green. 
 
-11. You can create your own user using the command (with the `Terminal` option in step 8):
+10. You can create your own user using the command (with the `Terminal` option in step 7):
 
 ```bash
   python manage.py createsuperuser
 ```
-12. They must create an `.env` file with the application credentials:
+11. They must create an `.env` file with the application credentials:
 
 ```bash
 # Django
@@ -209,8 +201,8 @@ sudo curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --de
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 sudo apt update
 sudo apt upgrade
-sudo apt install python3.11 python3-pip python3.11-venv python3.11-dev libpq-dev python3.11-distutils python3.11-tk python3.11-gdbm python3.11-lib2to3 postgresql postgresql-contrib nginx
-sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
+sudo apt install python3.12 python3-pip python3.12-venv python3.12-dev libpq-dev python3.12-distutils python3.12-tk python3.12-gdbm python3.12-lib2to3 postgresql postgresql-contrib nginx
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1
 ```
 
 2. Clone the repository, create a virtual environment and install the dependencies. Use the commands:

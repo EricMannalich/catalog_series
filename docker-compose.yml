@@ -23,11 +23,11 @@ x-app-variables: &app-variables
 
 services:
     postgres-animecard:
-        image: postgres:15
+        image: postgres:16
         container_name: postgres-animecard
         environment: *database-variables
         volumes:
-            - postgres_15_animecard_data:/var/lib/postgresql/data/
+            - postgres_16_animecard_data:/var/lib/postgresql/data/
         ports: 
             - "5433:5432"
 
@@ -61,6 +61,6 @@ services:
 
 volumes:
     .:
-    postgres_15_animecard_data:
+    postgres_16_animecard_data:
     ssl:
     static:
