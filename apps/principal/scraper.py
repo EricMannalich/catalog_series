@@ -18,13 +18,16 @@ def update_imdb():
             except:
                 continue
 
-            item_puntuacion = soup.find("span", attrs={"class": "sc-bde20123-1 iZlgcd"})
+            item_puntuacion = soup.find("span", attrs={"class": "sc-bde20123-1 cMEQkK"})
+            new_puntuacion = 0
             if item_puntuacion :
                 new_puntuacion = float(item_puntuacion.get_text())
                 if new_puntuacion > 0 and new_puntuacion < 10:
                     serie.promedio_puntuaciones_imdb = new_puntuacion
 
-            item_sinopsis = soup.find("span", attrs={"class": "sc-466bb6c-2 eVLpWt"})
+            item_sinopsis = soup.find("span", attrs={"class": "sc-466bb6c-0 hlbAws"})
+            #print({"item_puntuacion":item_puntuacion, "item_sinopsis":item_sinopsis})
+            item_sinopsis_text = ""
             if item_sinopsis :
                 item_sinopsis_text = item_sinopsis.get_text()
                 if len(item_sinopsis_text) > 30:
@@ -37,5 +40,5 @@ def update_imdb():
             for company in companies_list:
                 print("a :",company.get_text())"""
             
-            print({"Name":serie.nombre, "Score":new_puntuacion})
+            print({"Name":serie.nombre, "Score":new_puntuacion, "Sinopsis_len":len(item_sinopsis_text)})
 
