@@ -62,7 +62,10 @@ def iplocationuser(get_response):
         async def middleware(request):
             # Code to be executed for each request before
             # the view (and later middleware) are called.
-            get_user_ip(request)
+            try:
+                get_user_ip(request)
+            except:
+                pass
             response = await get_response(request)
             # Code to be executed for each request/response after
             # the view is called.
@@ -73,7 +76,10 @@ def iplocationuser(get_response):
         def middleware(request):
             # Code to be executed for each request before
             # the view (and later middleware) are called.
-            get_user_ip(request)
+            try:
+                get_user_ip(request)
+            except:
+                pass
             response = get_response(request)
             # Code to be executed for each request/response after
             # the view is called.
