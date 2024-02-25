@@ -3,6 +3,7 @@ django-cors-headers
 django-simple-history
 django-queryset-csv
 django-tinymce
+django-import-export
 djoser
 gunicorn
 Pillow
