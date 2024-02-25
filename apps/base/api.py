@@ -177,3 +177,18 @@ class IpAddressGraphicAPIView(APIView):
         if data:
             return Response(data, status = status.HTTP_200_OK)
         return Response({'message': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)
+    
+
+class IpAddressMapAPIView(APIView):
+    serializer_model = IpAddressSerializer
+    permission_classes = [ReadOnly]
+    
+    def get(self, request, format=None):
+        model = self.serializer_model().Meta.model.objects.filter(state = True).order_by("country_code2")
+        old_labels = model.distinct("country_code2").values_list("country_code2")
+        data = []
+        for old_label in old_labels:
+            data.append({'country' : old_label[0].lower(), 'value' : model.filter(country_code2 = old_label[0]).count()})
+        if data:
+            return Response(data, status = status.HTTP_200_OK)
+        return Response({'message': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)
