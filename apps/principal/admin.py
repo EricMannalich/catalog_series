@@ -1,18 +1,32 @@
 from django.contrib import admin
-
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 from apps.principal.models import *
 
+class GeneroResource(resources.ModelResource):
+    class Meta:
+        model = Genero
 
-# Register your models here.
-class GeneroAdmin(admin.ModelAdmin):
+class GeneroAdmin(ImportExportModelAdmin):
+    resource_class = GeneroResource
     list_display = ("nombre", "descripcion")
     list_display_links = list_display
 
-class ColorAdmin(admin.ModelAdmin):
+class ColorResource(resources.ModelResource):
+    class Meta:
+        model = Color
+
+class ColorAdmin(ImportExportModelAdmin):
+    resource_class = ColorResource
     list_display = ("nombre", "descripcion",'image')
     list_display_links = list_display
 
-class SerieAdmin(admin.ModelAdmin):
+class SerieResource(resources.ModelResource):
+    class Meta:
+        model = Serie
+
+class SerieAdmin(ImportExportModelAdmin):
+    resource_class = SerieResource
     fieldsets = (
         ('Identidad', {
             'fields' : ('nombre','sinopsis','fecha_salida','image','cantidad_episodios','link_imdb',),
@@ -37,12 +51,22 @@ class SerieAdmin(admin.ModelAdmin):
     list_filter = ("emision", 'color', "genero",)
     date_hierarchy = ("fecha_salida")
 
-class EpisodioAdmin(admin.ModelAdmin):
+class EpisodioResource(resources.ModelResource):
+    class Meta:
+        model = Episodio
+
+class EpisodioAdmin(ImportExportModelAdmin):
+    resource_class = EpisodioResource
     list_display = ("nombre","serie")
     list_display_links = list_display
     search_fields = list_display
 
-class PuntuacionAdmin(admin.ModelAdmin):
+class PuntuacionResource(resources.ModelResource):
+    class Meta:
+        model = Puntuacion
+
+class PuntuacionAdmin(ImportExportModelAdmin):
+    resource_class = PuntuacionResource
     list_display = ("usuario","serie", "puntuacion")
     list_display_links = list_display
     search_fields = ("usuario","serie")

@@ -157,6 +157,9 @@ class FiltroViewSet(GeneralViewSet):
 class EndBarViewSet(GeneralViewSet):
     serializer_class = EndBarSerializer
 
+class IpAddressViewSet(GeneralViewSet):
+    serializer_class = IpAddressSerializer
+
 class IpAddressGraphicAPIView(APIView):
     serializer_model = IpAddressSerializer
     permission_classes = [ReadOnly]

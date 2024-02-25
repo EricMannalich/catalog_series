@@ -58,6 +58,7 @@ THIRD_APPS = [
     'rest_framework',
     'simple_history',
     'tinymce',
+    'import_export',
 ]
 
 INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS + SOCIAL_AUTH_APPS
