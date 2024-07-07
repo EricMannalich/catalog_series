@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
-import ujson
+# import ujson
 
 from apps.base.api import *
 from apps.base.serializers import *
