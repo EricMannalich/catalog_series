@@ -1,6 +1,8 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.http import JsonResponse
+import ujson
 
 from apps.base.api import *
 from apps.base.serializers import *
@@ -20,7 +22,7 @@ class SerieViewSet(GeneralViewSet):
     def retrieve(self, request, pk=None):
         model = self.get_serializer().Meta.model.objects.filter(state = True, id = pk).first()
         serializer = SerieSerializerDetail(model)
-        return Response(serializer.data)
+        return JsonResponse(serializer.data, json_dumps_params={'ensure_ascii': False})
 
     def list(self, request):
         model = get_filter_serie(self, request)
@@ -30,8 +32,8 @@ class SerieViewSet(GeneralViewSet):
             count = model.count()
             model = paginacion(model, pagina, cant_pagina)
             data = self.get_data(model)
-            return Response({'count':count, 'results': data}, status = status.HTTP_200_OK)
-        return Response({'message': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'count': count, 'results': data}, status=status.HTTP_200_OK, json_dumps_params={'ensure_ascii': False})
+        return JsonResponse({'message': 'Not found!'}, status = status.HTTP_400_BAD_REQUEST)
     
 
 class EpisodioViewSet(GeneralViewSet):
@@ -58,7 +60,7 @@ class PuntuacionViewSet(GeneralViewSet):
     def list(self, request):
         model = self.data_url(request)
         data = self.get_data(model)
-        return Response(data, status = status.HTTP_200_OK)
+        return JsonResponse(data, status = status.HTTP_200_OK)
 
     def create(self, request):
         serializer = self.serializer_class(data = request.data)
@@ -66,7 +68,7 @@ class PuntuacionViewSet(GeneralViewSet):
             usuario = request.user.id
             if not usuario:
                 #usuario = serializer.data.get('usuario')
-                return Response({'message': 'This user cannot change the score'}, status=status.HTTP_401_UNAUTHORIZED)
+                return JsonResponse({'message': 'This user cannot change the score'}, status=status.HTTP_401_UNAUTHORIZED)
             serie = serializer.data.get('serie')
             puntuacion = serializer.data.get('puntuacion')
             #print(usuario,serie, puntuacion)
@@ -74,5 +76,5 @@ class PuntuacionViewSet(GeneralViewSet):
             puntuacion_insert.save()
             model = self.data_url(request)
             data = self.get_data(model)
-            return Response(data, status = status.HTTP_200_OK)
-        return Response({'message': 'Invalid data!'}, status = status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(data, status = status.HTTP_200_OK)
+        return JsonResponse({'message': 'Invalid data!'}, status = status.HTTP_400_BAD_REQUEST)

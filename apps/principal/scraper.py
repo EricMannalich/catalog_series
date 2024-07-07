@@ -18,14 +18,14 @@ def update_imdb():
             except:
                 continue
 
-            item_puntuacion = soup.find("span", attrs={"class": "sc-bde20123-1 cMEQkK"})
+            item_puntuacion = soup.find("span", attrs={"class": "sc-eb51e184-1 cxhhrI"})
             new_puntuacion = 0
             if item_puntuacion :
                 new_puntuacion = float(item_puntuacion.get_text())
                 if new_puntuacion > 0 and new_puntuacion < 10:
                     serie.promedio_puntuaciones_imdb = new_puntuacion
 
-            item_sinopsis = soup.find("span", attrs={"class": "sc-466bb6c-0 hlbAws"})
+            item_sinopsis = soup.find("span", attrs={"class": "sc-2d37a7c7-1 eSoBYy"})
             #print({"item_puntuacion":item_puntuacion, "item_sinopsis":item_sinopsis})
             item_sinopsis_text = ""
             if item_sinopsis :

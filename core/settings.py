@@ -65,7 +65,7 @@ INSTALLED_APPS = BASE_APPS + LOCAL_APPS + THIRD_APPS + SOCIAL_AUTH_APPS
 
 MIDDLEWARE = SOCIAL_AUTH_MIDDLEWARE + [
     'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.gzip.GZipMiddleware',
+    #'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -138,12 +138,12 @@ DATABASES = {
 }
 
 # Cache (python-memcached and pymemcache)
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -168,7 +168,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
